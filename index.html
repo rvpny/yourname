@@ -1,234 +1,252 @@
-<?php
-session_start();
-
-$popular_books = [];
-if (file_exists('./config/koneksi.php')) {
-    require_once './config/koneksi.php';
-    $popular_books = getPopularBooks(6);
-}
-
-if (isset($_SESSION['flash_message'])) {
-    $message = $_SESSION['flash_message'];
-    unset($_SESSION['flash_message']); // Hapus pesan setelah ditampilkan
-    echo "<script>alert('$message');</script>";
-}
-?>
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selamat Datang di Bilgi Evi</title>
-    <link rel="stylesheet" href="./assets/css/style.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
+    <title>Pustaka Digital Al-Ghifari</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- FontAwesome untuk Ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- SweetAlert2 CSS & JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <style>
+        /* --- Kustomisasi CSS --- */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        /* Navbar dengan bayangan lembut */
+        .navbar {
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        /* Area Hero (Banner Utama) */
+        .hero-section {
+            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+            color: white;
+            padding: 120px 0 80px;
+            text-align: center;
+            border-bottom-left-radius: 50px;
+            border-bottom-right-radius: 50px;
+            margin-bottom: 40px;
+        }
+        
+        /* Efek Hover untuk Kartu Buku */
+        .book-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .book-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15) !important;
+        }
+        
+        /* Tombol melengkung */
+        .btn-custom {
+            border-radius: 25px;
+            padding: 10px 24px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+    </style>
 </head>
+<body>
 
-<body class="landing">
-    <!-- Main Header -->
-    <nav class="main-header">
-        <div class="header-container">   
-            <div class="logo">
-                <a href="index.php" style="font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: #495F86; text-decoration: none;">BILGI EVI</a>
-            </div>       
-            <ul class="navigation-menu">
-                <li><a href="index.php">Beranda</a></li>
-                <li><a href="#about"> Kami</a></li>
-                <li><a href="<?= isset($_SESSION['login']) ? 
-            ($_SESSION['role'] === 'admin' ? './pages/admin/admin_dashboard.php' : './pages/users/user_dashboard.php') : 
-            './pages/login.php' ?>" 
-            class="<?= !isset($_SESSION['login']) ? 'with-login-check' : '' ?>">Perpustakaan</a></li> 
-            </ul>
-            <div class="header-actions">
-                <?php if(isset($_SESSION['login'])): ?>
-                    <span class="user-greeting" style="margin-right: 15px;">
-                        Halo, <?= htmlspecialchars($_SESSION['username']) ?>
-                        <small>(<?= ucfirst($_SESSION['role']) ?>)</small>
-                    </span>
-                    <a href="./pages/logout.php" class="register-button">Logout</a>
-                <?php else: ?>
-                    <a href="./pages/login.php" class="login-button">Login</a>
-                    <a href="./pages/register.php" class="register-button">Daftar</a>
-                <?php endif; ?>
-            </div>
-             <button class="mobile-menu-toggle" aria-label="Toggle menu">
-                <i class="fas fa-bars"></i>
+    <!-- 1. Navbar di Atas (Fixed Top) -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-primary" href="#">
+                <i class="fas fa-book-reader me-2"></i>Pustaka Al-Ghifari
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
             </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link active" href="#">Beranda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#katalog">Katalog</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#layanan">Layanan</a></li>
+                </ul>
+                <div class="d-flex ms-lg-3">
+                    <button class="btn btn-outline-primary btn-custom" onclick="popupLogin()">Masuk</button>
+                </div>
+            </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <header class="hero-section">
-        <div class="hero-content">
-            <h1 id="welcome-text">Selamat Datang</h1>
-            <p id="welcome-tagline">Temukan dunia baru dalam setiap halaman</p>
-        </div>
-
-        <!-- Slider Buku -->
-        <div class="swiper-container book-slider">
-            <div class="swiper-wrapper">
-                <!-- Slide 1 -->
-                <div class="swiper-slide"><img src="./assets/image/bg/bg-1.png" alt="Cover Buku 1"></div>
-                <!-- Slide 2 -->
-                <div class="swiper-slide"><img src="./assets/image/bg/bg-2.png" alt="Cover Buku 2"></div>
-                <!-- Slide 3 -->
-                <div class="swiper-slide"><img src="./assets/image/bg/bg-3.png" alt="Cover Buku 3"></div>
-                <!-- Slide 4 -->
-                <div class="swiper-slide"><img src="./assets/image/bg/bg-4.png" alt="Cover Buku 4"></div>
-                <!-- Slide 5 -->
-                <div class="swiper-slide"><img src="./assets/image/bg/bg-5.png" alt="Cover Buku 5"></div>
-            </div>
-            <div class="swiper-pagination"></div>
-        </div>
-    </header>
-
-    <!-- About -->
-    <section id="about" class="about-section">
-    <div class="container" style="background: #fff; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); padding: 32px 24px; margin-bottom: 40px;">
-        <h2 style="color:#495F86ff; font-size: 2.2rem; margin-bottom: 16px; text-align:center;">
-            <i class="fas fa-book-open" style="margin-right:8px;"></i> Tentang Kami
-        </h2>
-        <p style="font-size: 1.1rem; color: #333; line-height: 1.8; text-align:justify;">
-            <strong>Perpustakaan Bilgi Evi</strong> adalah pusat literasi dan pengetahuan yang berdedikasi untuk mendukung minat baca masyarakat. Kami menyediakan ribuan koleksi buku dari berbagai genre, mulai dari fiksi, non-fiksi, hingga referensi akademik yang dapat diakses oleh semua kalangan.<br><br>
-            Dengan suasana yang nyaman dan fasilitas modern, kami berkomitmen menjadi tempat belajar, berdiskusi, dan berinovasi. Selain layanan peminjaman buku, kami juga rutin mengadakan kegiatan seperti bedah buku, kelas literasi digital, dan pelatihan keterampilan untuk mendukung pengembangan diri anggota.<br><br>
-            Mari bergabung bersama kami, temukan inspirasi baru, dan jadikan membaca sebagai bagian dari gaya hidup Anda!
-        </p>
-    </div>
-</section>
-
-<!-- Popular Books Section -->
-<main class="content-section">
-    <section class="popular-books">
-        <div class="section-header">
-             <h2>Buku Populer</h2>
-             <a href="<?= isset($_SESSION['login']) ? ($_SESSION['role'] === 'admin' ? './pages/admin/admin_buku.php' : './pages/users/user_buku.php') : './pages/login.php' ?>" class="view-all-button">
-                Lihat Semua Buku <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
-        <div class="book-grid">
-        <?php
-        require_once './config/koneksi.php';
-
-        $query_popular = "SELECT b.*, 
-                        (SELECT COUNT(*) FROM peminjaman p WHERE p.id_buku = b.id) as pinjam_count
-                        FROM buku b
-                        LEFT JOIN peminjaman p ON b.id = p.id_buku
-                        WHERE b.stok > 0 
-                        GROUP BY b.id
-                        ORDER BY pinjam_count DESC, b.stok DESC 
-                        LIMIT 6";
-        $result_popular = mysqli_query($koneksi, $query_popular);
-
-        if(mysqli_num_rows($result_popular) > 0):
-            while($book = mysqli_fetch_assoc($result_popular)):
-
-                $detail_link = isset($_SESSION['login']) 
-                    ? ($_SESSION['role'] === 'admin' 
-                        ? './pages/admin/admin_buku_edit.php?id='.$book['id'] 
-                        : './pages/users/detail_buku.php?id='.$book['id'])
-                    : 'javascript:void(0);';
-                
-                $link_class = !isset($_SESSION['login']) ? 'require-login' : '';
-        ?>
-
-        <div class="book-item">
-            <?php if (isset($_SESSION['login'])): ?>
-                <a href="<?= $detail_link ?>">
-                    <?php if (!empty($book['cover'])): ?>
-                        <img src="./uploads/buku/<?= htmlspecialchars($book['cover']) ?>" 
-                            alt="Cover <?= htmlspecialchars($book['judul']) ?>">
-                    <?php else: ?>
-                        <div class="book-cover-placeholder">
-                            <i class="fas fa-book"></i>
-                        </div>
-                    <?php endif; ?>
-                </a>
-            <?php else: ?>
-                <a href="./pages/login.php?redirect=detail_buku&id=<?= $book['id'] ?>" 
-                style="position:relative;"
-                title="Login dulu untuk melihat detail buku">
-                    <?php if (!empty($book['cover'])): ?>
-                        <img loading="lazy" src="./uploads/buku/<?= htmlspecialchars($book['cover']) ?>" 
-                            alt="Cover <?= htmlspecialchars($book['judul']) ?> karya <?= htmlspecialchars($book['pengarang']) ?>">
-                    <?php else: ?>
-                        <div class="book-cover-placeholder">
-                            <i class="fas fa-book"></i>
-                        </div>
-                    <?php endif; ?>
-                    <div class="login-overlay">
-                        <span>Login dulu</span>
-                    </div>
-                </a>
-            <?php endif; ?>
-            <h3 title="<?= htmlspecialchars($book['judul']) ?>">
-                    <?= htmlspecialchars(mb_strimwidth($book['judul'], 0, 30, '...')) ?>
-                </h3>
-                <p><?= htmlspecialchars($book['pengarang']) ?></p>
-                
-                <?php if($book['stok'] <= 0): ?>
-                    <div class="out-of-stock">Stok Habis</div>
-                <?php endif; ?>
-            </div>
-        <?php endwhile; ?>
-        <?php else: ?>
-            <div class="empty-state">
-                <i class="fas fa-book-open"></i>
-                <h3>Tidak ada buku populer saat ini</h3>
-            </div>
-        <?php endif; ?>
+    <!-- 2. Hero Section (Header) -->
+    <section class="hero-section">
+        <div class="container">
+            <h1 class="display-4 fw-bold mb-4">Jelajahi Jendela Dunia Digital</h1>
+            <p class="lead mb-5 opacity-75">Akses ribuan literatur mulai dari Rekayasa Perangkat Lunak hingga Ilmu Perpustakaan modern dengan mudah, kapan saja dan di mana saja.</p>
+            <button class="btn btn-light btn-lg btn-custom text-primary" onclick="popupCari()">
+                <i class="fas fa-search me-2"></i>Cari Buku Sekarang
+            </button>
         </div>
     </section>
-</main>
 
-    <!-- Footer Section -->
-    <footer>
-        <div class="footer-contact">
-            <strong>Kontak:</strong><br>
-            Email: <a href="mailto:ravaprayoga9@gmail.com">ravaprayoga9@gmail.com</a><br>
-            Telepon: <a href="tel:085866330781">0858-6633-0781</a>
+    <!-- 3. Konten Utama: Katalog Buku -->
+    <section id="katalog" class="container mb-5 pt-4">
+        <h2 class="text-center fw-bold mb-5 text-dark">Koleksi Terpopuler</h2>
+        <div class="row g-4">
+            
+            <!-- Buku 1 (Memakai Bootstrap Modal) -->
+            <div class="col-md-4">
+                <div class="card book-card h-100 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-laptop-code fa-4x text-primary mb-3"></i>
+                        <h5 class="card-title fw-bold">Pengantar Rekayasa Perangkat Lunak</h5>
+                        <p class="card-text text-muted small">Pelajari arsitektur sistem, basis data, dan siklus pengembangan aplikasi.</p>
+                        <!-- Tombol ini memicu Modal Bootstrap -->
+                        <button class="btn btn-primary btn-sm mt-3 rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#modalDetailBuku">Lihat Detail</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Buku 2 (Memakai SweetAlert Konfirmasi) -->
+            <div class="col-md-4">
+                <div class="card book-card h-100 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-server fa-4x text-success mb-3"></i>
+                        <h5 class="card-title fw-bold">Manajemen Data & Sistem Informasi</h5>
+                        <p class="card-text text-muted small">Panduan modern pengelolaan informasi untuk arsiparis dan pustakawan.</p>
+                        <!-- Tombol ini memicu SweetAlert -->
+                        <button class="btn btn-success btn-sm mt-3 rounded-pill px-4" onclick="popupPinjam('Manajemen Data & Sistem Informasi')">Pinjam Cepat</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Buku 3 -->
+            <div class="col-md-4">
+                <div class="card book-card h-100 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-mobile-alt fa-4x text-info mb-3"></i>
+                        <h5 class="card-title fw-bold">Pemrograman Mobile (Flutter Dasar)</h5>
+                        <p class="card-text text-muted small">Membangun UI yang responsif dan menarik untuk perangkat Android & iOS.</p>
+                        <button class="btn btn-info text-white btn-sm mt-3 rounded-pill px-4" onclick="popupPinjam('Pemrograman Mobile (Flutter Dasar)')">Pinjam Cepat</button>
+                    </div>
+                </div>
+            </div>
+
         </div>
-        <p style="margin-top:12px;">&copy; 2025 Perpustakaan Bilgi Evi. Semua Hak Cipta Dilindungi.</p>
+    </section>
+
+    <!-- 4. Bootstrap Modal (Muncul saat klik "Lihat Detail" pada Buku 1) -->
+    <div class="modal fade" id="modalDetailBuku" tabindex="-1" aria-labelledby="judulModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-primary text-white border-0">
+                    <h5 class="modal-title fw-bold" id="judulModal">Detail Literatur</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body p-4 text-center">
+                    <i class="fas fa-book fa-5x text-secondary mb-3"></i>
+                    <h4 class="fw-bold">Pengantar Rekayasa Perangkat Lunak</h4>
+                    <span class="badge bg-success mb-3">Tersedia</span>
+                    <ul class="list-unstyled text-start bg-light p-3 rounded">
+                        <li><strong>Kategori:</strong> Teknologi / PPLG</li>
+                        <li><strong>Tahun Terbit:</strong> 2026</li>
+                        <li><strong>Format:</strong> Fisik & E-Book (PDF)</li>
+                    </ul>
+                    <p class="text-muted small">Buku ini membahas fundamental *software development*, tata letak, pengelolaan basis data (seperti PHP/MySQL), hingga metode pengujian terstruktur.</p>
+                </div>
+                <div class="modal-footer border-0 bg-light">
+                    <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary rounded-pill px-4" onclick="prosesPinjamDariModal()">Pinjam Sekarang</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. Footer -->
+    <footer class="bg-dark text-white text-center py-4 mt-auto">
+        <p class="mb-0 text-white-50">&copy; 2026 Pustaka Digital Al-Ghifari. Dirancang untuk masa depan literasi.</p>
     </footer>
 
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-    <script src="./assets/js/script.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Bootstrap JS Bundle (Memuat Popper.js untuk interaksi komponen) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- 6. Kumpulan Script Logika SweetAlert & Bootstrap -->
     <script>
-        <?php if (isset($_GET['logout']) && $_GET['logout'] === 'success'): ?>
-        document.addEventListener('DOMContentLoaded', function() {
+        // Popup untuk tombol Login di Navbar
+        function popupLogin() {
             Swal.fire({
-            icon: 'success',
-            title: 'Logout Berhasil',
-            text: 'Anda telah keluar dari sistem'
+                title: 'Halaman Masuk',
+                text: 'Sistem otentikasi sedang dalam tahap integrasi.',
+                icon: 'info',
+                confirmButtonColor: '#0d6efd',
+                confirmButtonText: 'Baiklah'
             });
-            
-            history.replaceState({}, document.title, window.location.pathname);
-        });
-        <?php endif; ?>
-    <script>
-    document.querySelectorAll('a.with-login-check').forEach(link => {
-        link.addEventListener('click', function(e) {
-            if(!<?= isset($_SESSION['login']) ? 'true' : 'false' ?>) {
-                e.preventDefault();
-                Swal.fire({
-                    title: 'Login Required',
-                    text: 'Anda perlu login untuk mengakses perpustakaan',
-                    icon: 'info',
-                    confirmButtonText: 'Login Now',
-                    showCancelButton: true,
-                    cancelButtonText: 'Cancel'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = './pages/login.php';
-                    }
-                });
-            }
-        });
-    });
-    </script>
-    </script>
+        }
 
+        // Popup dengan timer untuk simulasi pencarian
+        function popupCari() {
+            Swal.fire({
+                title: 'Menghubungkan ke Database...',
+                html: 'Mohon tunggu sebentar.',
+                timer: 1500,
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading()
+                }
+            }).then((result) => {
+                // Setelah selesai loading, gulir otomatis ke bagian katalog
+                document.getElementById('katalog').scrollIntoView({ behavior: 'smooth' });
+            });
+        }
+
+        // Popup interaktif Konfirmasi Peminjaman (Yes/No)
+        function popupPinjam(namaBuku) {
+            Swal.fire({
+                title: 'Konfirmasi Pinjam',
+                text: `Apakah Anda yakin ingin menambahkan "${namaBuku}" ke daftar pinjaman?`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#198754',
+                cancelButtonColor: '#dc3545',
+                confirmButtonText: 'Ya, Pinjam!',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Berhasil!',
+                        text: 'Buku telah diproses. Silakan cek riwayat akun Anda.',
+                        icon: 'success',
+                        confirmButtonColor: '#0d6efd'
+                    });
+                }
+            });
+        }
+
+        // Menggabungkan Bootstrap Modal dan SweetAlert
+        function prosesPinjamDariModal() {
+            // 1. Dapatkan instance modal bootstrap yang sedang terbuka
+            const modalEl = document.getElementById('modalDetailBuku');
+            const bootstrapModal = bootstrap.Modal.getInstance(modalEl);
+            
+            // 2. Tutup modal tersebut
+            bootstrapModal.hide();
+
+            // 3. Beri sedikit jeda agar animasi tutup modal selesai, lalu panggil SweetAlert
+            setTimeout(() => {
+                Swal.fire({
+                    title: 'Peminjaman Sukses',
+                    text: 'Silakan ambil buku fisik di meja sirkulasi atau unduh versi digitalnya.',
+                    icon: 'success',
+                    confirmButtonColor: '#0d6efd'
+                });
+            }, 300);
+        }
+    </script>
 </body>
 </html>
