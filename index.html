@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Puspustaka</title>
+    <title>Pustaka Digital - Dengan Scroll Panjang</title>
     
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -37,15 +37,15 @@
             margin-bottom: 40px;
         }
         
-        /* Efek Hover untuk Kartu Buku */
-        .book-card {
+        /* Efek Hover untuk Kartu Buku & Layanan */
+        .book-card, .service-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             border: none;
             border-radius: 12px;
             overflow: hidden;
         }
         
-        .book-card:hover {
+        .book-card:hover, .service-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 12px 24px rgba(0,0,0,0.15) !important;
         }
@@ -56,6 +56,15 @@
             padding: 10px 24px;
             font-weight: 600;
             letter-spacing: 0.5px;
+        }
+
+        /* Section layanan dengan latar putih */
+        .layanan-section {
+            background-color: #ffffff;
+            padding: 60px 0;
+            margin-top: 40px;
+            border-radius: 40px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
         }
     </style>
 </head>
@@ -94,37 +103,32 @@
         </div>
     </section>
 
-    <!-- 3. Konten Utama: Katalog Buku -->
+    <!-- 3. Konten Utama: Katalog Buku (Baris Pertama) -->
     <section id="katalog" class="container mb-5 pt-4">
         <h2 class="text-center fw-bold mb-5 text-dark">Koleksi Terpopuler</h2>
         <div class="row g-4">
-            
-            <!-- Buku 1 (Memakai Bootstrap Modal) -->
+            <!-- Buku 1 (Modal) -->
             <div class="col-md-4">
                 <div class="card book-card h-100 shadow-sm">
                     <div class="card-body text-center p-4">
                         <i class="fas fa-laptop-code fa-4x text-primary mb-3"></i>
                         <h5 class="card-title fw-bold">Pengantar Rekayasa Perangkat Lunak</h5>
                         <p class="card-text text-muted small">Pelajari arsitektur sistem, basis data, dan siklus pengembangan aplikasi.</p>
-                        <!-- Tombol ini memicu Modal Bootstrap -->
                         <button class="btn btn-primary btn-sm mt-3 rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#modalDetailBuku">Lihat Detail</button>
                     </div>
                 </div>
             </div>
-
-            <!-- Buku 2 (Memakai SweetAlert Konfirmasi) -->
+            <!-- Buku 2 (SweetAlert) -->
             <div class="col-md-4">
                 <div class="card book-card h-100 shadow-sm">
                     <div class="card-body text-center p-4">
                         <i class="fas fa-server fa-4x text-success mb-3"></i>
                         <h5 class="card-title fw-bold">Manajemen Data & Sistem Informasi</h5>
                         <p class="card-text text-muted small">Panduan modern pengelolaan informasi untuk arsiparis dan pustakawan.</p>
-                        <!-- Tombol ini memicu SweetAlert -->
                         <button class="btn btn-success btn-sm mt-3 rounded-pill px-4" onclick="popupPinjam('Manajemen Data & Sistem Informasi')">Pinjam Cepat</button>
                     </div>
                 </div>
             </div>
-
             <!-- Buku 3 -->
             <div class="col-md-4">
                 <div class="card book-card h-100 shadow-sm">
@@ -136,11 +140,74 @@
                     </div>
                 </div>
             </div>
+        </div>
 
+        <!-- Baris Kedua Koleksi Terbaru (Agar scroll lebih panjang) -->
+        <div class="row g-4 mt-4">
+            <div class="col-md-4">
+                <div class="card book-card h-100 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-database fa-4x text-warning mb-3"></i>
+                        <h5 class="card-title fw-bold">Basis Data Terapan (MySQL & NoSQL)</h5>
+                        <p class="card-text text-muted small">Panduan lengkap merancang database untuk aplikasi web modern.</p>
+                        <button class="btn btn-warning text-dark btn-sm mt-3 rounded-pill px-4" onclick="popupPinjam('Basis Data Terapan')">Pinjam</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card book-card h-100 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-cloud-upload-alt fa-4x text-secondary mb-3"></i>
+                        <h5 class="card-title fw-bold">Cloud & Deployment (GitHub Pages, Hosting)</h5>
+                        <p class="card-text text-muted small">Cara mempublikasikan website statis dan dinamis secara gratis.</p>
+                        <button class="btn btn-secondary btn-sm mt-3 rounded-pill px-4" onclick="popupPinjam('Cloud & Deployment')">Pinjam</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card book-card h-100 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-paint-brush fa-4x text-danger mb-3"></i>
+                        <h5 class="card-title fw-bold">UI/UX Design dengan Figma</h5>
+                        <p class="card-text text-muted small">Panduan merancang antarmuka yang intuitif dan menarik.</p>
+                        <button class="btn btn-danger btn-sm mt-3 rounded-pill px-4" onclick="popupPinjam('UI/UX Design dengan Figma')">Pinjam</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- 4. Bootstrap Modal (Muncul saat klik "Lihat Detail" pada Buku 1) -->
+    <!-- 4. Section Layanan (Baru, sesuai link navbar) -->
+    <section id="layanan" class="layanan-section">
+        <div class="container">
+            <h2 class="text-center fw-bold mb-5 text-dark">Layanan Unggulan Kami</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card service-card h-100 text-center p-4 shadow-sm border-0">
+                        <i class="fas fa-book-open fa-3x text-primary mb-3"></i>
+                        <h5 class="fw-bold">Baca Online</h5>
+                        <p class="text-muted">Akses ribuan e-book langsung dari browser tanpa perlu unduh.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card service-card h-100 text-center p-4 shadow-sm border-0">
+                        <i class="fas fa-headset fa-3x text-success mb-3"></i>
+                        <h5 class="fw-bold">Konsultasi Pustakawan</h5>
+                        <p class="text-muted">Chat dengan tenaga ahli untuk membantu riset dan referensi tugas.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card service-card h-100 text-center p-4 shadow-sm border-0">
+                        <i class="fas fa-shipping-fast fa-3x text-info mb-3"></i>
+                        <h5 class="fw-bold">Layanan Antar-Jemput</h5>
+                        <p class="text-muted">Untuk area Bandung Raya, buku fisik bisa diantar ke rumah.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Bootstrap Modal (Tetap) -->
     <div class="modal fade" id="modalDetailBuku" tabindex="-1" aria-labelledby="judulModal" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg">
@@ -167,54 +234,15 @@
         </div>
     </div>
 
-    <!-- 4. Section Layanan -->
-<section id="layanan" class="container mb-5 pt-5">
-    <h2 class="text-center fw-bold mb-5">Layanan Kami</h2>
-    <div class="row text-center g-4">
-        <div class="col-md-4">
-            <div class="p-4 bg-white shadow-sm rounded">
-                <i class="fas fa-book-open fa-3x text-primary mb-3"></i>
-                <h5 class="fw-bold">Peminjaman Buku</h5>
-                <p class="text-muted small">Pinjam buku fisik maupun digital dengan mudah dan cepat.</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="p-4 bg-white shadow-sm rounded">
-                <i class="fas fa-download fa-3x text-success mb-3"></i>
-                <h5 class="fw-bold">Download E-Book</h5>
-                <p class="text-muted small">Akses ribuan e-book gratis untuk menunjang pembelajaran.</p>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="p-4 bg-white shadow-sm rounded">
-                <i class="fas fa-user-graduate fa-3x text-info mb-3"></i>
-                <h5 class="fw-bold">Belajar Online</h5>
-                <p class="text-muted small">Materi pembelajaran berbasis teknologi terbaru.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- 5. Section Tentang -->
-<section class="bg-light py-5">
-    <div class="container text-center">
-        <h2 class="fw-bold mb-4">Tentang Pustaka</h2>
-        <p class="text-muted mx-auto" style="max-width: 700px;">
-            Pustaka Digital Al-Ghifari merupakan platform literasi modern yang menyediakan berbagai sumber ilmu pengetahuan
-            berbasis teknologi. Kami berkomitmen untuk meningkatkan minat baca dan akses pendidikan bagi semua kalangan.
-        </p>
-    </div>
-</section>
-    
-    <!-- 5. Footer -->
+    <!-- 6. Footer -->
     <footer class="bg-dark text-white text-center py-4 mt-auto">
         <p class="mb-0 text-white-50">&copy; 2026 Pustaka Digital Al-Ghifari. Dirancang untuk masa depan literasi.</p>
     </footer>
 
-    <!-- Bootstrap JS Bundle (Memuat Popper.js untuk interaksi komponen) -->
+    <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
-    <!-- 6. Kumpulan Script Logika SweetAlert & Bootstrap -->
+    <!-- Script yang sudah ada (ditambah sedikit untuk scroll smooth via navbar) -->
     <script>
         // Popup untuk tombol Login di Navbar
         function popupLogin() {
@@ -227,7 +255,6 @@
             });
         }
 
-        // Popup dengan timer untuk simulasi pencarian
         function popupCari() {
             Swal.fire({
                 title: 'Menghubungkan ke Database...',
@@ -237,13 +264,11 @@
                 didOpen: () => {
                     Swal.showLoading()
                 }
-            }).then((result) => {
-                // Setelah selesai loading, gulir otomatis ke bagian katalog
+            }).then(() => {
                 document.getElementById('katalog').scrollIntoView({ behavior: 'smooth' });
             });
         }
 
-        // Popup interaktif Konfirmasi Peminjaman (Yes/No)
         function popupPinjam(namaBuku) {
             Swal.fire({
                 title: 'Konfirmasi Pinjam',
@@ -267,16 +292,10 @@
             });
         }
 
-        // Menggabungkan Bootstrap Modal dan SweetAlert
         function prosesPinjamDariModal() {
-            // 1. Dapatkan instance modal bootstrap yang sedang terbuka
             const modalEl = document.getElementById('modalDetailBuku');
             const bootstrapModal = bootstrap.Modal.getInstance(modalEl);
-            
-            // 2. Tutup modal tersebut
             bootstrapModal.hide();
-
-            // 3. Beri sedikit jeda agar animasi tutup modal selesai, lalu panggil SweetAlert
             setTimeout(() => {
                 Swal.fire({
                     title: 'Peminjaman Sukses',
@@ -286,6 +305,20 @@
                 });
             }, 300);
         }
+
+        // Smooth scroll untuk link navbar (opsional, sudah pakai href #id)
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const targetId = this.getAttribute('href');
+                if (targetId && targetId !== '#') {
+                    const target = document.querySelector(targetId);
+                    if (target) {
+                        e.preventDefault();
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        });
     </script>
 </body>
 </html>
