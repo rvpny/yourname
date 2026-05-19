@@ -1,324 +1,961 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pustaka Digital</title>
-    
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- FontAwesome untuk Ikon -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- SweetAlert2 CSS & JS -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
-    <style>
-        /* --- Kustomisasi CSS --- */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
-        }
-        
-        /* Navbar dengan bayangan lembut */
-        .navbar {
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        
-        /* Area Hero (Banner Utama) */
-        .hero-section {
-            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
-            color: white;
-            padding: 120px 0 80px;
-            text-align: center;
-            border-bottom-left-radius: 50px;
-            border-bottom-right-radius: 50px;
-            margin-bottom: 40px;
-        }
-        
-        /* Efek Hover untuk Kartu Buku & Layanan */
-        .book-card, .service-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: none;
-            border-radius: 12px;
-            overflow: hidden;
-        }
-        
-        .book-card:hover, .service-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.15) !important;
-        }
-        
-        /* Tombol melengkung */
-        .btn-custom {
-            border-radius: 25px;
-            padding: 10px 24px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NGASAL.DEV — Portal Gak Jelas Tapi Berguna</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0d0d0d;
+      --card: #161616;
+      --accent: #ff3c00;
+      --yellow: #ffe600;
+      --green: #00ff88;
+      --blue: #00cfff;
+      --purple: #b96fff;
+      --white: #f5f5f5;
+      --muted: #888;
+      --border: #2a2a2a;
+    }
 
-        /* Section layanan dengan latar putih */
-        .layanan-section {
-            background-color: #ffffff;
-            padding: 60px 0;
-            margin-top: 40px;
-            border-radius: 40px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
-        }
-    </style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'Nunito', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Custom Cursor */
+    .cursor {
+      position: fixed;
+      width: 18px; height: 18px;
+      background: var(--accent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: difference;
+      transition: transform 0.1s ease, width 0.2s, height 0.2s;
+    }
+    .cursor.big { width: 50px; height: 50px; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+
+    /* NAVBAR */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 48px;
+      background: rgba(13,13,13,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      color: var(--accent);
+      letter-spacing: 2px;
+    }
+    .nav-logo span { color: var(--yellow); }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
+    .nav-links a {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 1px;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-badge {
+      background: var(--accent);
+      color: white;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      padding: 6px 14px;
+      border-radius: 2px;
+      letter-spacing: 1px;
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      padding-top: 80px;
+    }
+
+    .hero-bg-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,60,0,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,60,0,0.05) 1px, transparent 1px);
+      background-size: 48px 48px;
+      animation: gridMove 20s linear infinite;
+    }
+    @keyframes gridMove {
+      0% { background-position: 0 0; }
+      100% { background-position: 48px 48px; }
+    }
+
+    .hero-noise {
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.3; pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 4px;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(80px, 15vw, 180px);
+      line-height: 0.9;
+      letter-spacing: -2px;
+      position: relative;
+      z-index: 2;
+      animation: fadeUp 0.7s 0.1s ease both;
+    }
+    .hero-title .line1 { color: var(--white); }
+    .hero-title .line2 { color: var(--accent); -webkit-text-stroke: 2px var(--accent); }
+    .hero-title .line3 { color: transparent; -webkit-text-stroke: 2px var(--yellow); }
+
+    .hero-sub {
+      margin-top: 24px;
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.7;
+      animation: fadeUp 0.7s 0.2s ease both;
+    }
+    .hero-sub strong { color: var(--green); }
+
+    .hero-btns {
+      display: flex; gap: 16px; margin-top: 40px;
+      animation: fadeUp 0.7s 0.3s ease both;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: white; border: none;
+      font-family: 'Space Mono', monospace;
+      font-size: 13px; letter-spacing: 1px;
+      padding: 14px 32px;
+      border-radius: 2px;
+      cursor: none;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn-primary:hover { transform: translate(-3px,-3px); box-shadow: 6px 6px 0 var(--yellow); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--white);
+      border: 1px solid var(--border);
+      font-family: 'Space Mono', monospace;
+      font-size: 13px; letter-spacing: 1px;
+      padding: 14px 32px;
+      border-radius: 2px;
+      cursor: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-ghost:hover { border-color: var(--white); }
+
+    .hero-floaters {
+      position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+    }
+    .floater {
+      position: absolute;
+      font-size: 48px;
+      opacity: 0.08;
+      animation: float 8s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%,100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-30px) rotate(10deg); }
+    }
+
+    .scroll-hint {
+      position: absolute; bottom: 40px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px; letter-spacing: 3px;
+      color: var(--muted);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{ opacity:0.3; } 50%{ opacity:1; } }
+
+    /* SECTIONS COMMON */
+    section { padding: 100px 48px; }
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px; letter-spacing: 4px;
+      color: var(--accent); text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(48px, 6vw, 80px);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .section-desc { color: var(--muted); font-size: 15px; line-height: 1.6; max-width: 500px; }
+
+    /* MEME SECTION */
+    .meme-section { background: var(--bg); }
+    .meme-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 48px; }
+    .meme-count {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 80px; color: var(--border);
+      line-height: 1;
+    }
+
+    .meme-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .meme-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      transition: transform 0.2s, border-color 0.2s;
+      position: relative;
+    }
+    .meme-card:hover { transform: translateY(-6px); border-color: var(--accent); }
+    .meme-card:hover .meme-overlay { opacity: 1; }
+
+    .meme-img-wrap {
+      aspect-ratio: 1;
+      background: #1a1a1a;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 64px;
+      position: relative;
+      overflow: hidden;
+    }
+    .meme-overlay {
+      position: absolute; inset: 0;
+      background: rgba(255,60,0,0.15);
+      display: flex; align-items: center; justify-content: center;
+      gap: 12px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .meme-action {
+      background: rgba(0,0,0,0.7);
+      color: white; border: 1px solid rgba(255,255,255,0.2);
+      font-family: 'Space Mono', monospace;
+      font-size: 11px; padding: 8px 14px;
+      border-radius: 2px; cursor: none;
+      transition: background 0.2s;
+    }
+    .meme-action:hover { background: var(--accent); }
+
+    .meme-info { padding: 14px 16px; }
+    .meme-tag {
+      display: inline-block;
+      font-family: 'Space Mono', monospace;
+      font-size: 9px; letter-spacing: 2px;
+      color: var(--accent);
+      text-transform: uppercase;
+      background: rgba(255,60,0,0.1);
+      padding: 2px 8px; border-radius: 2px;
+      margin-bottom: 8px;
+    }
+    .meme-title { font-weight: 900; font-size: 14px; margin-bottom: 6px; }
+    .meme-meta {
+      display: flex; align-items: center; gap: 12px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px; color: var(--muted);
+    }
+    .meme-viral { color: var(--green); }
+
+    /* TICKER */
+    .ticker-wrap {
+      background: var(--accent);
+      padding: 14px 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .ticker-inner {
+      display: inline-block;
+      animation: ticker 25s linear infinite;
+    }
+    .ticker-item {
+      display: inline-block;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px; letter-spacing: 2px;
+      color: white; padding: 0 32px;
+    }
+    .ticker-dot { color: rgba(255,255,255,0.4); }
+    @keyframes ticker { 0%{ transform:translateX(0); } 100%{ transform:translateX(-50%); } }
+
+    /* IEM SECTION */
+    .iem-section { background: #0a0a0a; }
+    .iem-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 48px; flex-wrap: wrap; gap: 24px; }
+
+    .iem-filters { display: flex; gap: 8px; flex-wrap: wrap; }
+    .filter-btn {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px; letter-spacing: 1px;
+      padding: 8px 16px; border-radius: 2px;
+      border: 1px solid var(--border);
+      background: transparent; color: var(--muted);
+      cursor: none; transition: all 0.2s;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      background: var(--yellow); color: #000; border-color: var(--yellow);
+    }
+
+    .iem-list { display: flex; flex-direction: column; gap: 1px; }
+    .iem-row {
+      display: grid;
+      grid-template-columns: 60px 1fr 120px 140px 100px 80px;
+      align-items: center;
+      padding: 20px 24px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      gap: 20px;
+      transition: background 0.2s, border-color 0.2s;
+      margin-bottom: 8px;
+    }
+    .iem-row:hover { background: #1c1c1c; border-color: var(--yellow); }
+    .iem-rank {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px; color: var(--border);
+      text-align: center;
+    }
+    .iem-row:nth-child(1) .iem-rank { color: #ffd700; }
+    .iem-row:nth-child(2) .iem-rank { color: #c0c0c0; }
+    .iem-row:nth-child(3) .iem-rank { color: #cd7f32; }
+
+    .iem-emoji { font-size: 40px; text-align: center; }
+    .iem-name-wrap {}
+    .iem-name { font-weight: 900; font-size: 16px; margin-bottom: 4px; }
+    .iem-brand {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px; color: var(--muted); letter-spacing: 1px;
+    }
+    .iem-price {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px; color: var(--green);
+    }
+    .iem-stars { display: flex; gap: 3px; align-items: center; }
+    .star { color: var(--yellow); font-size: 14px; }
+    .star.half { color: var(--border); }
+    .iem-score-val {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px; color: var(--blue);
+      text-align: right;
+    }
+
+    .iem-bar-wrap { grid-column: 1 / -1; display: flex; gap: 16px; padding-top: 8px; }
+    .iem-bar-item { flex: 1; }
+    .iem-bar-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px; letter-spacing: 1px;
+      color: var(--muted); margin-bottom: 4px;
+    }
+    .iem-bar-bg { background: var(--border); border-radius: 2px; height: 4px; }
+    .iem-bar-fill { height: 4px; border-radius: 2px; transition: width 0.8s ease; }
+
+    /* CHAOS SECTION */
+    .chaos-section { background: var(--bg); text-align: center; }
+    .chaos-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px; margin-top: 60px;
+    }
+    .chaos-card {
+      padding: 40px 24px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: var(--card);
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .chaos-card:hover { transform: rotate(-1deg) scale(1.02); border-color: var(--purple); }
+    .chaos-card:nth-child(2):hover { transform: rotate(1deg) scale(1.02); border-color: var(--blue); }
+    .chaos-icon { font-size: 56px; margin-bottom: 16px; }
+    .chaos-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px; margin-bottom: 8px;
+    }
+    .chaos-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 48px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 24px;
+    }
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 36px; color: var(--accent);
+    }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px; color: var(--muted);
+      text-decoration: none; letter-spacing: 1px;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--white); }
+    .footer-credit {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px; color: var(--border);
+      letter-spacing: 1px;
+    }
+
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(30px); }
+      to { opacity:1; transform:translateY(0); }
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed; bottom: 32px; right: 32px;
+      background: var(--card);
+      border: 1px solid var(--accent);
+      color: var(--white);
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      padding: 14px 20px;
+      border-radius: 4px;
+      z-index: 9998;
+      opacity: 0; transform: translateY(20px);
+      transition: all 0.3s; pointer-events: none;
+    }
+    .toast.show { opacity:1; transform: translateY(0); }
+
+    /* MODAL */
+    .modal-bg {
+      position: fixed; inset:0;
+      background: rgba(0,0,0,0.8);
+      z-index: 200;
+      display: flex; align-items:center; justify-content:center;
+      opacity:0; pointer-events:none;
+      transition: opacity 0.2s;
+      backdrop-filter: blur(8px);
+    }
+    .modal-bg.open { opacity:1; pointer-events:all; }
+    .modal {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 48px;
+      max-width: 500px; width: 90%;
+      text-align: center;
+      transform: scale(0.9);
+      transition: transform 0.2s;
+    }
+    .modal-bg.open .modal { transform: scale(1); }
+    .modal-emoji { font-size: 80px; margin-bottom: 16px; }
+    .modal-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 40px; margin-bottom: 8px;
+    }
+    .modal-sub { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+    .modal-close {
+      background: var(--accent); color:white;
+      border:none; font-family:'Space Mono',monospace;
+      font-size:12px; padding:12px 28px;
+      border-radius:2px; cursor:none;
+    }
+
+    /* STATS BAR */
+    .stats-bar {
+      display: flex; gap: 0;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 60px;
+    }
+    .stat-item {
+      flex:1; padding: 28px 24px;
+      border-right: 1px solid var(--border);
+      text-align:center;
+    }
+    .stat-item:last-child { border-right:none; }
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px; line-height:1;
+      margin-bottom: 4px;
+    }
+    .stat-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px; letter-spacing:2px;
+      color: var(--muted); text-transform:uppercase;
+    }
+
+    /* SEARCH BAR */
+    .search-wrap {
+      display:flex; gap:12px; margin-bottom: 32px;
+    }
+    .search-input {
+      flex:1; padding:12px 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius:2px;
+      color: var(--white);
+      font-family: 'Space Mono', monospace;
+      font-size:13px;
+      outline:none; transition: border-color 0.2s;
+    }
+    .search-input:focus { border-color: var(--accent); }
+    .search-input::placeholder { color: var(--muted); }
+    .search-btn {
+      background: var(--yellow); color:#000;
+      border:none; font-family:'Space Mono',monospace;
+      font-size:12px; letter-spacing:1px;
+      padding:12px 24px; border-radius:2px;
+      cursor:none; font-weight:700;
+    }
+
+    @media(max-width:768px){
+      nav { padding: 14px 20px; }
+      .nav-links { display:none; }
+      section { padding: 60px 20px; }
+      .iem-row { grid-template-columns: 40px 1fr 80px; }
+      .iem-price, .iem-score-val, .iem-stars { display:none; }
+      .chaos-grid { grid-template-columns: 1fr; }
+      footer { padding:32px 20px; flex-direction:column; text-align:center; }
+    }
+  </style>
 </head>
 <body>
 
-    <!-- 1. Navbar di Atas (Fixed Top) -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
-        <div class="container">
-            <a class="navbar-brand fw-bold text-primary" href="#">
-                <i class="fas fa-book-reader me-2"></i>Puspustaka
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link active" href="#">Beranda</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#katalog">Katalog</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#layanan">Layanan</a></li>
-                </ul>
-                <div class="d-flex ms-lg-3">
-                    <button class="btn btn-outline-primary btn-custom" onclick="popupLogin()">Masuk</button>
-                </div>
-            </div>
-        </div>
-    </nav>
+<div class="cursor" id="cursor"></div>
 
-    <!-- 2. Hero Section (Header) -->
-    <section class="hero-section">
-        <div class="container">
-            <h1 class="display-4 fw-bold mb-4">Jelajahi Jendela Dunia Digital</h1>
-            <p class="lead mb-5 opacity-75">Akses ribuan literatur mulai dari Rekayasa Perangkat Lunak hingga Ilmu Perpustakaan modern dengan mudah, kapan saja dan di mana saja.</p>
-            <button class="btn btn-light btn-lg btn-custom text-primary" onclick="popupCari()">
-                <i class="fas fa-search me-2"></i>Cari Buku Sekarang
-            </button>
-        </div>
-    </section>
+<!-- NAVBAR -->
+<nav>
+  <div class="nav-logo">NGASAL<span>.</span>DEV</div>
+  <ul class="nav-links">
+    <li><a href="#meme">MEME</a></li>
+    <li><a href="#iem">IEM RATING</a></li>
+    <li><a href="#random">RANDOM</a></li>
+    <li><a href="#footer">ABOUT</a></li>
+  </ul>
+  <div class="nav-badge">⚡ VIRAL NOW</div>
+</nav>
 
-    <!-- 3. Konten Utama: Katalog Buku (Baris Pertama) -->
-    <section id="katalog" class="container mb-5 pt-4">
-        <h2 class="text-center fw-bold mb-5 text-dark">Koleksi Terpopuler</h2>
-        <div class="row g-4">
-            <!-- Buku 1 (Modal) -->
-            <div class="col-md-4">
-                <div class="card book-card h-100 shadow-sm">
-                    <div class="card-body text-center p-4">
-                        <i class="fas fa-laptop-code fa-4x text-primary mb-3"></i>
-                        <h5 class="card-title fw-bold">Pengantar Rekayasa Perangkat Lunak</h5>
-                        <p class="card-text text-muted small">Pelajari arsitektur sistem, basis data, dan siklus pengembangan aplikasi.</p>
-                        <button class="btn btn-primary btn-sm mt-3 rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#modalDetailBuku">Lihat Detail</button>
-                    </div>
-                </div>
-            </div>
-            <!-- Buku 2 (SweetAlert) -->
-            <div class="col-md-4">
-                <div class="card book-card h-100 shadow-sm">
-                    <div class="card-body text-center p-4">
-                        <i class="fas fa-server fa-4x text-success mb-3"></i>
-                        <h5 class="card-title fw-bold">Manajemen Data & Sistem Informasi</h5>
-                        <p class="card-text text-muted small">Panduan modern pengelolaan informasi untuk arsiparis dan pustakawan.</p>
-                        <button class="btn btn-success btn-sm mt-3 rounded-pill px-4" onclick="popupPinjam('Manajemen Data & Sistem Informasi')">Pinjam Cepat</button>
-                    </div>
-                </div>
-            </div>
-            <!-- Buku 3 -->
-            <div class="col-md-4">
-                <div class="card book-card h-100 shadow-sm">
-                    <div class="card-body text-center p-4">
-                        <i class="fas fa-mobile-alt fa-4x text-info mb-3"></i>
-                        <h5 class="card-title fw-bold">Pemrograman Mobile (Flutter Dasar)</h5>
-                        <p class="card-text text-muted small">Membangun UI yang responsif dan menarik untuk perangkat Android & iOS.</p>
-                        <button class="btn btn-info text-white btn-sm mt-3 rounded-pill px-4" onclick="popupPinjam('Pemrograman Mobile (Flutter Dasar)')">Pinjam Cepat</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-noise"></div>
+  <div class="hero-floaters" id="floaters"></div>
 
-        <!-- Baris Kedua Koleksi Terbaru (Agar scroll lebih panjang) -->
-        <div class="row g-4 mt-4">
-            <div class="col-md-4">
-                <div class="card book-card h-100 shadow-sm">
-                    <div class="card-body text-center p-4">
-                        <i class="fas fa-database fa-4x text-warning mb-3"></i>
-                        <h5 class="card-title fw-bold">Basis Data Terapan (MySQL & NoSQL)</h5>
-                        <p class="card-text text-muted small">Panduan lengkap merancang database untuk aplikasi web modern.</p>
-                        <button class="btn btn-warning text-dark btn-sm mt-3 rounded-pill px-4" onclick="popupPinjam('Basis Data Terapan')">Pinjam</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card book-card h-100 shadow-sm">
-                    <div class="card-body text-center p-4">
-                        <i class="fas fa-cloud-upload-alt fa-4x text-secondary mb-3"></i>
-                        <h5 class="card-title fw-bold">Cloud & Deployment (GitHub Pages, Hosting)</h5>
-                        <p class="card-text text-muted small">Cara mempublikasikan website statis dan dinamis secara gratis.</p>
-                        <button class="btn btn-secondary btn-sm mt-3 rounded-pill px-4" onclick="popupPinjam('Cloud & Deployment')">Pinjam</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card book-card h-100 shadow-sm">
-                    <div class="card-body text-center p-4">
-                        <i class="fas fa-paint-brush fa-4x text-danger mb-3"></i>
-                        <h5 class="card-title fw-bold">UI/UX Design dengan Figma</h5>
-                        <p class="card-text text-muted small">Panduan merancang antarmuka yang intuitif dan menarik.</p>
-                        <button class="btn btn-danger btn-sm mt-3 rounded-pill px-4" onclick="popupPinjam('UI/UX Design dengan Figma')">Pinjam</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+  <p class="hero-eyebrow">🇮🇩 Portal internet tergokil se-Indonesia</p>
+  <h1 class="hero-title">
+    <span class="line1">NGASAL</span><br>
+    <span class="line2">TAPI</span><br>
+    <span class="line3">BENERAN</span>
+  </h1>
+  <p class="hero-sub">
+    Koleksi meme viral terbaru, rating earphone/IEM buat audiophil budgetin,
+    dan konten random yang <strong>gak ada gunanya tapi tetep lo baca sampe abis</strong>.
+  </p>
+  <div class="hero-btns">
+    <button class="btn-primary" onclick="scrollTo('#meme')">LIHAT MEME 🔥</button>
+    <button class="btn-ghost" onclick="scrollTo('#iem')">CEK EARPHONE</button>
+  </div>
+  <p class="scroll-hint">↓ SCROLL TERUS BOS</p>
+</section>
 
-    <!-- 4. Section Layanan (Baru, sesuai link navbar) -->
-    <section id="layanan" class="layanan-section">
-        <div class="container">
-            <h2 class="text-center fw-bold mb-5 text-dark">Layanan Unggulan Kami</h2>
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="card service-card h-100 text-center p-4 shadow-sm border-0">
-                        <i class="fas fa-book-open fa-3x text-primary mb-3"></i>
-                        <h5 class="fw-bold">Baca Online</h5>
-                        <p class="text-muted">Akses ribuan e-book langsung dari browser tanpa perlu unduh.</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card service-card h-100 text-center p-4 shadow-sm border-0">
-                        <i class="fas fa-headset fa-3x text-success mb-3"></i>
-                        <h5 class="fw-bold">Konsultasi Pustakawan</h5>
-                        <p class="text-muted">Chat dengan tenaga ahli untuk membantu riset dan referensi tugas.</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card service-card h-100 text-center p-4 shadow-sm border-0">
-                        <i class="fas fa-shipping-fast fa-3x text-info mb-3"></i>
-                        <h5 class="fw-bold">Layanan Antar-Jemput</h5>
-                        <p class="text-muted">Untuk area Bandung Raya, buku fisik bisa diantar ke rumah.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-inner" id="ticker"></div>
+</div>
 
-    <!-- 5. Bootstrap Modal (Tetap) -->
-    <div class="modal fade" id="modalDetailBuku" tabindex="-1" aria-labelledby="judulModal" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg">
-                <div class="modal-header bg-primary text-white border-0">
-                    <h5 class="modal-title fw-bold" id="judulModal">Detail Literatur</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                </div>
-                <div class="modal-body p-4 text-center">
-                    <i class="fas fa-book fa-5x text-secondary mb-3"></i>
-                    <h4 class="fw-bold">Pengantar Rekayasa Perangkat Lunak</h4>
-                    <span class="badge bg-success mb-3">Tersedia</span>
-                    <ul class="list-unstyled text-start bg-light p-3 rounded">
-                        <li><strong>Kategori:</strong> Teknologi / PPLG</li>
-                        <li><strong>Tahun Terbit:</strong> 2026</li>
-                        <li><strong>Format:</strong> Fisik & E-Book (PDF)</li>
-                    </ul>
-                    <p class="text-muted small">Buku ini membahas fundamental *software development*, tata letak, pengelolaan basis data (seperti PHP/MySQL), hingga metode pengujian terstruktur.</p>
-                </div>
-                <div class="modal-footer border-0 bg-light">
-                    <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-primary rounded-pill px-4" onclick="prosesPinjamDariModal()">Pinjam Sekarang</button>
-                </div>
-            </div>
-        </div>
+<!-- STATS BAR -->
+<div style="padding: 0 48px; margin-top: 48px;">
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-num" style="color:var(--accent)">4.2K</div>
+      <div class="stat-label">Meme Tersimpan</div>
     </div>
+    <div class="stat-item">
+      <div class="stat-num" style="color:var(--yellow)">237</div>
+      <div class="stat-label">IEM Direview</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" style="color:var(--green)">69K</div>
+      <div class="stat-label">Pengunjung Gak Jelas</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" style="color:var(--blue)">∞</div>
+      <div class="stat-label">Jam Produktivitas Buang</div>
+    </div>
+  </div>
+</div>
 
-    <!-- 6. Footer -->
-    <footer class="bg-dark text-white text-center py-4 mt-auto">
-        <p class="mb-0 text-white-50">&copy; 2026 Pustaka Digital Al-Ghifari. Dirancang untuk masa depan literasi.</p>
-    </footer>
+<!-- MEME SECTION -->
+<section class="meme-section" id="meme">
+  <div class="meme-header">
+    <div>
+      <p class="section-label">🎭 KOLEKSI BARU</p>
+      <h2 class="section-title">MEME<br>TERVIRAL</h2>
+      <p class="section-desc">Update tiap hari. Kalo meme lo ga ada disini, berarti ga viral.</p>
+    </div>
+    <div class="meme-count" id="meme-counter">000</div>
+  </div>
 
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- Script yang sudah ada (ditambah sedikit untuk scroll smooth via navbar) -->
-    <script>
-        // Popup untuk tombol Login di Navbar
-        function popupLogin() {
-            Swal.fire({
-                title: 'Halaman Masuk',
-                text: 'Sistem otentikasi sedang dalam tahap integrasi.',
-                icon: 'info',
-                confirmButtonColor: '#0d6efd',
-                confirmButtonText: 'Baiklah'
-            });
-        }
+  <div class="search-wrap">
+    <input class="search-input" type="text" placeholder="Cari meme... (contoh: ngakak, gabut, malam minggu)" id="meme-search" />
+    <button class="search-btn" onclick="filterMemes()">CARI</button>
+  </div>
 
-        function popupCari() {
-            Swal.fire({
-                title: 'Menghubungkan ke Database...',
-                html: 'Mohon tunggu sebentar.',
-                timer: 1500,
-                timerProgressBar: true,
-                didOpen: () => {
-                    Swal.showLoading()
-                }
-            }).then(() => {
-                document.getElementById('katalog').scrollIntoView({ behavior: 'smooth' });
-            });
-        }
+  <div class="meme-grid" id="meme-grid"></div>
+</section>
 
-        function popupPinjam(namaBuku) {
-            Swal.fire({
-                title: 'Konfirmasi Pinjam',
-                text: `Apakah Anda yakin ingin menambahkan "${namaBuku}" ke daftar pinjaman?`,
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#198754',
-                cancelButtonColor: '#dc3545',
-                confirmButtonText: 'Ya, Pinjam!',
-                cancelButtonText: 'Batal',
-                reverseButtons: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire({
-                        title: 'Berhasil!',
-                        text: 'Buku telah diproses. Silakan cek riwayat akun Anda.',
-                        icon: 'success',
-                        confirmButtonColor: '#0d6efd'
-                    });
-                }
-            });
-        }
+<!-- TICKER 2 -->
+<div class="ticker-wrap" style="background: var(--yellow);">
+  <div class="ticker-inner" id="ticker2"></div>
+</div>
 
-        function prosesPinjamDariModal() {
-            const modalEl = document.getElementById('modalDetailBuku');
-            const bootstrapModal = bootstrap.Modal.getInstance(modalEl);
-            bootstrapModal.hide();
-            setTimeout(() => {
-                Swal.fire({
-                    title: 'Peminjaman Sukses',
-                    text: 'Silakan ambil buku fisik di meja sirkulasi atau unduh versi digitalnya.',
-                    icon: 'success',
-                    confirmButtonColor: '#0d6efd'
-                });
-            }, 300);
-        }
+<!-- IEM SECTION -->
+<section class="iem-section" id="iem">
+  <div class="iem-header">
+    <div>
+      <p class="section-label">🎧 DATABASE AUDIOFIL MISKIN</p>
+      <h2 class="section-title">RATING<br>EARPHONE</h2>
+      <p class="section-desc">Dari yang harga segelas es teh sampe harga motor. Semua dirating jujur.</p>
+    </div>
+    <div class="iem-filters" id="iem-filters"></div>
+  </div>
+  <div class="iem-list" id="iem-list"></div>
+</section>
 
-        // Smooth scroll untuk link navbar (opsional, sudah pakai href #id)
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                const targetId = this.getAttribute('href');
-                if (targetId && targetId !== '#') {
-                    const target = document.querySelector(targetId);
-                    if (target) {
-                        e.preventDefault();
-                        target.scrollIntoView({ behavior: 'smooth' });
-                    }
-                }
-            });
-        });
-    </script>
+<!-- RANDOM CHAOS SECTION -->
+<section class="chaos-section" id="random">
+  <p class="section-label" style="text-align:center">🎲 KONTEN RANDOM</p>
+  <h2 class="section-title" style="font-size:clamp(60px,8vw,100px); color:var(--purple)">FITUR GAJELAS</h2>
+  <p class="section-desc" style="margin:0 auto;">Kami dengan bangga mempersembahkan fitur-fitur yang sama sekali gak perlu ada.</p>
+
+  <div class="chaos-grid" id="chaos-grid"></div>
+</section>
+
+<!-- FOOTER -->
+<footer id="footer">
+  <div>
+    <div class="footer-logo">NGASAL.DEV</div>
+    <div style="font-family:'Space Mono',monospace; font-size:10px; color:var(--muted); margin-top:4px; letter-spacing:1px;">
+      DIBUAT DENGAN ☕ & KEKOSONGAN EXISTENSIAL
+    </div>
+  </div>
+  <div class="footer-links">
+    <a href="#">GitHub</a>
+    <a href="#">Twitter</a>
+    <a href="#">Discord</a>
+    <a href="#">Lapor Bug</a>
+  </div>
+  <div class="footer-credit">© 2025 NGASAL.DEV — SEMUA HAK CIPTA DILUPAKAN</div>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modal">
+  <div class="modal">
+    <div class="modal-emoji" id="modal-emoji">🤣</div>
+    <div class="modal-title" id="modal-title">MEME ALERT</div>
+    <div class="modal-sub" id="modal-sub">Ini meme pilihan editorial kami yang sangat kredibel.</div>
+    <button class="modal-close" onclick="closeModal()">CLOSE BOS</button>
+  </div>
+</div>
+
+<script>
+// ===================== CURSOR =====================
+const cursor = document.getElementById('cursor');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+});
+document.querySelectorAll('button, a, .meme-card, .iem-row, .chaos-card, .filter-btn').forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.classList.add('big'));
+  el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
+});
+
+// ===================== FLOATERS =====================
+const floaterEmojis = ['🔥','💀','😭','🤣','👀','🎧','📻','💿','🎵','🎶','🌶️','🤡','👾','🕹️','⚡','🛸'];
+const floaterWrap = document.getElementById('floaters');
+floaterEmojis.forEach((em, i) => {
+  const f = document.createElement('div');
+  f.className = 'floater';
+  f.textContent = em;
+  f.style.left = Math.random()*90+'%';
+  f.style.top = Math.random()*90+'%';
+  f.style.animationDelay = (i*0.4)+'s';
+  f.style.animationDuration = (6+Math.random()*6)+'s';
+  f.style.fontSize = (30+Math.random()*40)+'px';
+  floaterWrap.appendChild(f);
+});
+
+// ===================== TICKER =====================
+function buildTicker(id, items, color='white') {
+  const el = document.getElementById(id);
+  const full = [...items,...items].map(t =>
+    `<span class="ticker-item" style="color:${color}">${t} <span class="ticker-dot">•</span></span>`
+  ).join('');
+  el.innerHTML = full;
+}
+const tickerItems = ['MEME BARU TIAP HARI','RATING IEM PALING JUJUR','KONTEN 100% HALAL','BUATAN ANAK BANGSA','BUKAN SPONSORED','GRATIS SELAMANYA','DIJAMIN NGAKAK','UPDATE 24/7'];
+const tickerItems2 = ['🎧 MOONDROP ARIA REKOMENDASI EDITORIAL','🔥 MEME MINGGU INI TERLALU ABSURD','💀 BUDGET IEM TERBAIK TAHUN INI','⚡ VIRAL ALERT: CHECK SEKARANG'];
+buildTicker('ticker', tickerItems);
+buildTicker('ticker2', tickerItems2, '#000');
+
+// ===================== MEMES =====================
+const memes = [
+  { emoji:'😭', tag:'GABUT', title:'Ketika deadline besok tapi masih buka sosmed', viral:'420K views', time:'2 jam lalu', color:'#ff3c00' },
+  { emoji:'💀', tag:'RELATABLE', title:'Minta izin ke orang tua buat meetup jam 7 malem', viral:'1.2M views', time:'5 jam lalu', color:'#b96fff' },
+  { emoji:'🤡', tag:'TRENDING', title:'POV: Buka browser buat kerja, malah buka YouTube', viral:'890K views', time:'1 jam lalu', color:'#00cfff' },
+  { emoji:'🔥', tag:'VIRAL', title:'Skill issue detected: Kirim meme ke grup keluarga', viral:'3.1M views', time:'30 mnt lalu', color:'#ffe600' },
+  { emoji:'👀', tag:'MALAM MINGGU', title:'Buka beranda, semua orang kencan, saya makan mie', viral:'567K views', time:'8 jam lalu', color:'#00ff88' },
+  { emoji:'😤', tag:'AUDIOFIL', title:'Beli IEM 2 juta dibilang "cuma earphone"', viral:'234K views', time:'3 jam lalu', color:'#ff3c00' },
+  { emoji:'🛸', tag:'RANDOM', title:'Hari jumat: bos minta report hari senin', viral:'1.8M views', time:'6 jam lalu', color:'#b96fff' },
+  { emoji:'🎮', tag:'GAMING', title:'Katanya sebentar, ternyata sampai subuh', viral:'2.4M views', time:'12 jam lalu', color:'#00cfff' },
+];
+
+let filteredMemes = [...memes];
+
+function renderMemes(data) {
+  const grid = document.getElementById('meme-grid');
+  grid.innerHTML = data.map((m,i) => `
+    <div class="meme-card" style="animation: fadeUp 0.4s ${i*0.05}s ease both;">
+      <div class="meme-img-wrap" style="background: ${m.color}18;">
+        <span style="font-size:72px">${m.emoji}</span>
+        <div class="meme-overlay">
+          <button class="meme-action" onclick="openMeme(${i})">LIHAT</button>
+          <button class="meme-action" onclick="shareMeme(${i})">SHARE</button>
+        </div>
+      </div>
+      <div class="meme-info">
+        <span class="meme-tag" style="color:${m.color}; background:${m.color}18">${m.tag}</span>
+        <div class="meme-title">${m.title}</div>
+        <div class="meme-meta">
+          <span class="meme-viral">🔥 ${m.viral}</span>
+          <span>${m.time}</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('meme-counter').textContent = String(data.length).padStart(3,'0');
+}
+
+renderMemes(memes);
+
+function filterMemes() {
+  const q = document.getElementById('meme-search').value.toLowerCase();
+  const filtered = memes.filter(m =>
+    m.title.toLowerCase().includes(q) ||
+    m.tag.toLowerCase().includes(q)
+  );
+  renderMemes(filtered.length ? filtered : memes);
+  if(!filtered.length) showToast('Meme ga ketemu bro, coba keyword lain 😅');
+}
+
+document.getElementById('meme-search').addEventListener('keydown', e => {
+  if(e.key === 'Enter') filterMemes();
+});
+
+function openMeme(i) {
+  const m = filteredMemes[i] || memes[i];
+  document.getElementById('modal-emoji').textContent = m.emoji;
+  document.getElementById('modal-title').textContent = m.title;
+  document.getElementById('modal-sub').textContent = `Tag: ${m.tag} | ${m.viral} | ${m.time}`;
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+document.getElementById('modal').addEventListener('click', e => { if(e.target.id==='modal') closeModal(); });
+
+function shareMeme(i) {
+  const m = memes[i];
+  showToast(`Link meme "${m.title.slice(0,30)}..." dicopy! 📋`);
+}
+
+// ===================== IEM =====================
+const iems = [
+  { emoji:'🏆', name:'Moondrop Aria', brand:'MOONDROP', price:'Rp 450K', stars:5, score:94, tuning:'Harman Target', color: '#ffd700',
+    bass:88, mid:92, treble:85, soundstage:78, val:98 },
+  { emoji:'🥈', name:'7Hz Salnotes Zero', brand:'7HZ', price:'Rp 260K', stars:5, score:92, tuning:'Netral',color:'#c0c0c0',
+    bass:82, mid:95, treble:88, soundstage:72, val:99 },
+  { emoji:'🥉', name:'Truthear Hexa', brand:'TRUTHEAR', price:'Rp 900K', stars:5, score:91, tuning:'Harman+',color:'#cd7f32',
+    bass:90, mid:90, treble:86, soundstage:85, val:90 },
+  { emoji:'💎', name:'ThieAudio Oracle MKII', brand:'THIEAUDIO', price:'Rp 3.2jt', stars:4, score:89, tuning:'U-Shape',color:'#00cfff',
+    bass:95, mid:85, treble:90, soundstage:95, val:75 },
+  { emoji:'🔥', name:'Kiwi Ears Cadenza', brand:'KIWI EARS', price:'Rp 380K', stars:4, score:87, tuning:'V-Shape',color:'#ff3c00',
+    bass:90, mid:80, treble:88, soundstage:75, val:92 },
+  { emoji:'⚡', name:'CCA CRA+', brand:'CCA', price:'Rp 120K', stars:4, score:84, tuning:'V-Shape',color:'#ffe600',
+    bass:88, mid:75, treble:90, soundstage:65, val:96 },
+  { emoji:'🎵', name:'KZ ZSN Pro X', brand:'KZ', price:'Rp 180K', stars:3, score:78, tuning:'Bright',color:'#b96fff',
+    bass:80, mid:72, treble:92, soundstage:60, val:88 },
+  { emoji:'💀', name:'Apple EarPods', brand:'APPLE', price:'Rp 350K', stars:2, score:45, tuning:'Gak jelas',color:'#888',
+    bass:40, mid:55, treble:50, soundstage:30, val:15 },
+];
+
+const barColors = { bass:'#ff3c00', mid:'#ffe600', treble:'#00cfff', soundstage:'#b96fff', val:'#00ff88' };
+
+function renderIEM(data) {
+  document.getElementById('iem-list').innerHTML = data.map((iem,i) => `
+    <div class="iem-row" style="animation: fadeUp 0.4s ${i*0.06}s ease both;">
+      <div class="iem-rank">${String(i+1).padStart(2,'0')}</div>
+      <div class="iem-emoji">${iem.emoji}</div>
+      <div class="iem-name-wrap">
+        <div class="iem-name">${iem.name}</div>
+        <div class="iem-brand">${iem.brand} · ${iem.tuning}</div>
+      </div>
+      <div class="iem-price">${iem.price}</div>
+      <div class="iem-stars">
+        ${[1,2,3,4,5].map(s=>`<span class="star ${s>iem.stars?'half':''}">★</span>`).join('')}
+      </div>
+      <div class="iem-score-val">${iem.score}</div>
+      <div class="iem-bar-wrap">
+        ${['bass','mid','treble','soundstage','val'].map(k=>`
+          <div class="iem-bar-item">
+            <div class="iem-bar-label">${k.toUpperCase()}</div>
+            <div class="iem-bar-bg">
+              <div class="iem-bar-fill" style="width:${iem[k]}%; background:${barColors[k]}"></div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+const iemCategories = ['SEMUA','BUDGET (<500K)','MID-FI','FLAGSHIP'];
+const filters = document.getElementById('iem-filters');
+iemCategories.forEach((cat,i) => {
+  const btn = document.createElement('button');
+  btn.className = 'filter-btn' + (i===0?' active':'');
+  btn.textContent = cat;
+  btn.onclick = () => {
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    if(i===0) renderIEM(iems);
+    else if(i===1) renderIEM(iems.filter(x=>x.price.includes('K') && parseInt(x.price.replace(/\D/g,''))<500));
+    else if(i===2) renderIEM(iems.filter(x=>x.price.includes('K') && parseInt(x.price.replace(/\D/g,''))>=500));
+    else renderIEM(iems.filter(x=>x.price.includes('jt')));
+  };
+  filters.appendChild(btn);
+});
+renderIEM(iems);
+
+// ===================== CHAOS CARDS =====================
+const chaosFeatures = [
+  { emoji:'🎲', title:'RANDOM MEME GENERATOR', desc:'Klik tombol, dapet meme random. Berguna? Tidak. Menghibur? Mungkin. Kita tidak tahu.', color:'var(--purple)' },
+  { emoji:'🧠', title:'IQ TEST EARPHONE', desc:'Jawab 5 pertanyaan, kami kasih tau IQ audiofil kamu. Akurasi 0%. Tapi setidaknya ada.', color:'var(--blue)' },
+  { emoji:'🌏', title:'MOOD TRACKER NASIONAL', desc:'Kami memantau mood orang Indonesia berdasarkan meme yang mereka share. 100% tidak saintifik.', color:'var(--green)' },
+];
+
+document.getElementById('chaos-grid').innerHTML = chaosFeatures.map((c,i) => `
+  <div class="chaos-card" onclick="handleChaos(${i})" style="cursor:none; border-color: ${c.color}22;">
+    <div class="chaos-icon">${c.emoji}</div>
+    <div class="chaos-title" style="color:${c.color}">${c.title}</div>
+    <div class="chaos-desc">${c.desc}</div>
+    <br>
+    <button class="btn-primary" style="margin-top:12px" onclick="handleChaos(${i})">COBA SEKARANG</button>
+  </div>
+`).join('');
+
+const chaosResponses = [
+  ['😂 Meme untukmu hari ini:', '🎲 Kamu dapet meme: "Waktu produktif = 0ms"', '🔥 Meme: "Tidur jam 2, bangun jam 5, why"'],
+  ['🎧 IQ Audiofil kamu: 69 (Nice)','📻 Kamu: "Cukup earphone gratisan"', '💿 Rekomendasi: Beli Moondrop Aria sekarang'],
+  ['😤 Mood nasional hari ini: GABUT','🌏 68% Indonesia lagi rebahan sekarang','📊 Puncak mood: jam 2 pagi, scrolling'],
+];
+let chaosIdx = [0,0,0];
+function handleChaos(i) {
+  const responses = chaosResponses[i];
+  showToast(responses[chaosIdx[i] % responses.length]);
+  chaosIdx[i]++;
+}
+
+// ===================== TOAST =====================
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 3000);
+}
+
+// ===================== SCROLL =====================
+function scrollTo(sel) {
+  document.querySelector(sel)?.scrollIntoView({ behavior:'smooth' });
+}
+
+// ===================== COUNTER ANIMATION =====================
+function animateCounter(el, target, suffix='') {
+  let start = 0;
+  const step = () => {
+    start += Math.ceil(target/60);
+    if(start >= target) { el.textContent = target+suffix; return; }
+    el.textContent = start+suffix;
+    requestAnimationFrame(step);
+  };
+  step();
+}
+
+// Intersection observer for stats
+const statsItems = document.querySelectorAll('.stat-num');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting) {
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.5 });
+statsItems.forEach(el => io.observe(el));
+
+// Konami code easter egg
+let konamiSeq = [];
+const konamiCode = [38,38,40,40,37,39,37,39,66,65];
+document.addEventListener('keydown', e => {
+  konamiSeq.push(e.keyCode);
+  if(konamiSeq.length > 10) konamiSeq.shift();
+  if(JSON.stringify(konamiSeq) === JSON.stringify(konamiCode)) {
+    document.getElementById('modal-emoji').textContent = '🎉';
+    document.getElementById('modal-title').textContent = 'KONAMI CODE!';
+    document.getElementById('modal-sub').textContent = 'Kamu nemu easter egg! Tidak ada hadiah. Hanya kebanggaan.';
+    document.getElementById('modal').classList.add('open');
+  }
+});
+
+// Init meme counter animation
+const memeCounter = document.getElementById('meme-counter');
+const obs = new IntersectionObserver(entries => {
+  if(entries[0].isIntersecting) {
+    let n = 0;
+    const t = setInterval(() => {
+      n++;
+      memeCounter.textContent = String(n).padStart(3,'0');
+      if(n >= memes.length) clearInterval(t);
+    }, 80);
+    obs.disconnect();
+  }
+});
+obs.observe(memeCounter);
+</script>
 </body>
 </html>
