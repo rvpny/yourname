@@ -1,533 +1,320 @@
-Berikut adalah kode HTML untuk landing page website yang berisi koleksi meme, stiker, dan rating earphone/IEM sesuai permintaan Anda.
-```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Memeverse & IEM Rating • Stiker Gokil + Politik</title>
-  <!-- Bootstrap 5 + Icons + Font Awesome -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    * {
-      scroll-behavior: smooth;
-    }
-    body {
-      background: #fef8e7;
-      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-    }
-    .navbar-brand {
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      background: linear-gradient(135deg, #e06c2e, #b7410e);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-    .hero-section {
-      background: linear-gradient(120deg, #2b1e10 0%, #3e2a1b 100%);
-      color: #ffefcf;
-      border-radius: 0 0 2rem 2rem;
-      padding: 2rem 1rem;
-    }
-    .shoutout-card {
-      background: #fff3e0;
-      border-left: 8px solid #c0392b;
-      transition: transform 0.2s;
-    }
-    .shoutout-card:hover {
-      transform: translateY(-5px);
-    }
-    .btn-warning-custom {
-      background: #f39c12;
-      border: none;
-      font-weight: bold;
-      transition: 0.2s;
-    }
-    .btn-warning-custom:hover {
-      background: #e67e22;
-      transform: scale(1.02);
-    }
-    .card-meme {
-      background: #ffffffdd;
-      backdrop-filter: blur(2px);
-      border-radius: 1.5rem;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-      transition: all 0.2s ease;
-    }
-    .card-meme:hover {
-      transform: translateY(-8px);
-    }
-    .meme-canvas {
-      width: 100%;
-      border-radius: 1rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      background: #f9e5c1;
-    }
-    .btn-download-meme {
-      background: #2c3e50;
-      color: white;
-      border-radius: 50px;
-      font-size: 0.85rem;
-      transition: 0.2s;
-    }
-    .btn-download-meme:hover {
-      background: #e67e22;
-      color: #1e1e1e;
-    }
-    .badge-politik {
-      background: #8e44ad;
-      color: gold;
-    }
-    .rating-star {
-      color: #ffb347;
-    }
-    footer {
-      background: #1e1b13;
-      color: #ccc;
-    }
-    .custom-link {
-      text-decoration: none;
-      font-weight: 600;
-    }
-    .upload-area {
-      border: 2px dashed #e67e22;
-      background: #fffbee;
-      border-radius: 1.5rem;
-    }
-    @media (max-width: 768px) {
-      .hero-section h1 {
-        font-size: 1.8rem;
-      }
-      .btn-download-meme {
-        font-size: 0.7rem;
-      }
-    }
-    .btn-outline-coffee {
-      border-color: #b87333;
-      color: #b87333;
-    }
-    .btn-outline-coffee:hover {
-      background: #b87333;
-      color: white;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Stimker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #f0f2f5;
+            padding: 20px;
+            color: #1e293b;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+            padding: 20px 16px;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            border-radius: 32px;
+            color: white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            letter-spacing: 2px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Grid galeri */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        /* Kartu gambar */
+        .card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+        }
+
+        /* Wrapper gambar agar konsisten */
+        .image-wrapper {
+            background: #f8fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #eef2ff;
+        }
+
+        .image-wrapper img {
+            max-width: 100%;
+            height: 240px;
+            object-fit: contain;
+            transition: transform 0.2s;
+            border-radius: 12px;
+        }
+
+        .image-wrapper img:active {
+            transform: scale(0.98);
+        }
+
+        /* Info & Tombol */
+        .card-info {
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            background: #ffffff;
+        }
+
+        .btn-download {
+            background: #2a5298;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s, transform 0.1s;
+            text-decoration: none;
+            font-family: inherit;
+        }
+
+        .btn-download:active {
+            transform: scale(0.96);
+        }
+
+        .btn-download:hover {
+            background: #1e3c72;
+        }
+
+        .file-name {
+            font-size: 0.7rem;
+            color: #475569;
+            background: #f1f5f9;
+            padding: 4px 10px;
+            border-radius: 30px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 140px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 24px;
+            font-size: 0.8rem;
+            color: #5b6e8c;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 20px;
+        }
+
+        /* Responsif untuk layar kecil */
+        @media (max-width: 640px) {
+            body {
+                padding: 12px;
+            }
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            .gallery {
+                gap: 16px;
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+            .image-wrapper img {
+                height: 200px;
+            }
+            .card-info {
+                padding: 12px;
+            }
+            .btn-download {
+                padding: 8px 16px;
+                font-size: 0.75rem;
+            }
+        }
+
+        /* Sembunyikan tombol jika JS tidak perlu, tapi tetap rapi */
+        .btn-download i {
+            font-style: normal;
+            font-weight: bold;
+        }
+
+        /* Notifikasi */
+        .toast-msg {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+    </style>
 </head>
 <body>
 
-<!-- Navbar sederhana random -->
-<nav class="navbar navbar-expand-lg bg-white shadow-sm py-2 sticky-top">
-  <div class="container">
-    <a class="navbar-brand fw-bold fs-3" href="#">
-      <i class="fas fa-mask fa-fw me-1" style="color:#e67e22;"></i> MEMEVERSE<span style="color:#b87333;">.id</span>
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarMain">
-      <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-2">
-        <li class="nav-item"><a class="nav-link" href="#iemRating"><i class="fas fa-headphones"></i> Rating IEM</a></li>
-        <li class="nav-item"><a class="nav-link" href="#vingralStickers"><i class="fas fa-sticky-note"></i> Stiker Vingral</a></li>
-        <li class="nav-item"><a class="nav-link" href="#politikMeme"><i class="fas fa-landmark"></i> Meme Politik</a></li>
-        <li class="nav-item"><a class="nav-link" href="#uploadOwn"><i class="fas fa-upload"></i> Upload Meme</a></li>
-      </ul>
+<div class="container">
+    <div class="header">
+        <h1>🖼️ STIMKER</h1>
+        <p>| Klik gambar untuk memperbesar • Tombol unduh untuk menyimpan</p>
     </div>
-  </div>
-</nav>
 
-<!-- Hero area dengan shoutout Fernanda Gunsan -->
-<div class="hero-section text-center">
-  <div class="container py-3">
-    <h1 class="display-5 fw-bold"><i class="fas fa-laugh-squint"></i> Stiker Galak, Meme Gila, IEM Rating!</h1>
-    <p class="lead">Koleksi meme terupdate, stiker politik absurd, dan rekomendasi earphone berkualitas.</p>
-    <div class="shoutout-card p-3 mx-auto rounded-4 mt-3" style="max-width: 550px;">
-      <i class="fab fa-youtube fa-2x text-danger me-2"></i> 
-      <strong class="fs-5">🎧 SHOUTOUT SPECIAL buat channel <a href="https://www.youtube.com/@FernandaGunsan" target="_blank" class="text-decoration-none fw-bold text-dark">Fernanda Gunsan</a> 🎸</strong>
-      <p class="mb-0 mt-1 small">"Review IEM kocak & mantap! Gaskeun subscribe!"</p>
+    <div class="gallery" id="galleryContainer">
+        <!-- Galeri akan diisi oleh JavaScript -->
+        <div style="text-align: center; grid-column: 1/-1; padding: 40px;">Memuat gambar...</div>
     </div>
-  </div>
+
+    <div class="footer">        
+    </div>
 </div>
 
-<div class="container my-5">
-  <!-- ========= SECTION RATING IEM / EARPHONE (link bebas user) ========= -->
-  <div id="iemRating" class="mb-5 pt-4">
-    <div class="d-flex justify-content-between align-items-center flex-wrap">
-      <h2 class="fw-bold"><i class="fas fa-chart-line text-warning"></i> Rating IEM & Earphone Terbaru</h2>
-      <span class="badge bg-secondary p-2">🎧 rekomendasi audiophile</span>
-    </div>
-    <p class="text-muted">+ link rating lengkap yang bisa kamu ganti sendiri (klik tombol di bawah).</p>
-    
-    <div class="row g-4 mt-2">
-      <!-- produk IEM 1 -->
-      <div class="col-md-4">
-        <div class="card h-100 border-0 shadow-sm rounded-4">
-          <div class="card-body">
-            <div class="d-flex justify-content-between">
-              <h5 class="card-title fw-bold">7Hz x Crinacle Zero 2</h5>
-              <span class="rating-star"><i class="fas fa-star"></i> 4.8/5</span>
-            </div>
-            <p class="card-text small">Neutral bass, detail luar biasa. Best value under $30.</p>
-            <div class="mt-2"><i class="fas fa-microphone-alt"></i> <strong>Signature:</strong> V-Shaped fun</div>
-            <hr>
-            <a href="#" id="iemLink1" class="btn btn-outline-coffee btn-sm w-100" target="_blank"><i class="fas fa-external-link-alt"></i> Lihat Rating Lengkap (ganti link)</a>
-          </div>
-        </div>
-      </div>
-      <!-- produk IEM 2 -->
-      <div class="col-md-4">
-        <div class="card h-100 border-0 shadow-sm rounded-4">
-          <div class="card-body">
-            <div class="d-flex justify-content-between">
-              <h5 class="card-title fw-bold">Truthear x Crinacle Zero Red</h5>
-              <span class="rating-star"><i class="fas fa-star"></i> 4.9/5</span>
-            </div>
-            <p class="card-text small">Tuning natural, bass akurat, cocok mixing & gaming.</p>
-            <div class="mt-2"><i class="fas fa-chart-simple"></i> Impedansi: 35Ω</div>
-            <hr>
-            <a href="#" id="iemLink2" class="btn btn-outline-coffee btn-sm w-100" target="_blank"><i class="fas fa-external-link-alt"></i> Lihat Rating Lengkap (ganti link)</a>
-          </div>
-        </div>
-      </div>
-      <!-- produk IEM 3 -->
-      <div class="col-md-4">
-        <div class="card h-100 border-0 shadow-sm rounded-4">
-          <div class="card-body">
-            <div class="d-flex justify-content-between">
-              <h5 class="card-title fw-bold">Moondrop Chu II</h5>
-              <span class="rating-star"><i class="fas fa-star"></i> 4.6/5</span>
-            </div>
-            <p class="card-text small">Detail treble, removable cable, harga ramah kantong.</p>
-            <div class="mt-2"><i class="fas fa-wifi"></i> Detachable 0.78mm</div>
-            <hr>
-            <a href="#" id="iemLink3" class="btn btn-outline-coffee btn-sm w-100" target="_blank"><i class="fas fa-external-link-alt"></i> Lihat Rating Lengkap (ganti link)</a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- input custom untuk mengganti link rating sesuai keinginan user -->
-    <div class="alert alert-warning mt-4 rounded-4 d-flex flex-wrap align-items-center justify-content-between gap-2">
-      <span><i class="fas fa-pen-alt"></i> <strong>Ganti link rating IEM versi kamu:</strong> nanti salin link review favoritmu (misal dari forum atau YouTube), lalu tempel di kolom.</span>
-      <div class="d-flex gap-2 flex-wrap">
-        <input type="text" id="customIemUrl" class="form-control w-auto" placeholder="https://example.com/rating-iem" style="min-width: 200px;">
-        <button id="applyLinksBtn" class="btn btn-dark btn-sm">Terapkan ke Semua Tombol</button>
-      </div>
-      <small class="text-muted w-100 mt-1">*Klik terapkan, semua tombol "Lihat Rating" akan mengarah ke link barumu. (default: #)</small>
-    </div>
-  </div>
+<div id="toastMsg" class="toast-msg"></div>
 
-  <!-- ========= KOLEKSI STIKER/GAMBAR MEME VINGRAL (dinamis + download) ========= -->
-  <div id="vingralStickers" class="mb-5 pt-3">
-    <div class="d-flex flex-wrap justify-content-between align-items-center border-bottom pb-2">
-      <h2 class="fw-bold"><i class="fas fa-smile-wink text-info"></i> 🔥 Stiker & Meme Vingral Terbaru</h2>
-      <a href="#" id="whatsappStickerLink" class="btn btn-success rounded-pill"><i class="fab fa-whatsapp"></i> Download Sticker Pack WA</a>
-    </div>
-    <p class="text-muted">Stiker random viral, lucu absurd. Download satu-satu atau ambil pack WA⬆️.</p>
-    <div class="row g-4" id="vingralGallery">
-      <!-- akan diisi javascript via canvas meme generator -->
-    </div>
-  </div>
-
-  <!-- ========= MEME POLITIK INDONESIA (Pak Pres, Pak Owi, Rupiah 18rb) ========= -->
-  <div id="politikMeme" class="mb-5 pt-3">
-    <div class="d-flex align-items-center gap-2">
-      <h2 class="fw-bold"><i class="fas fa-gavel text-danger"></i> Meme Politik Panas🔥 Indonesia</h2>
-      <span class="badge-politik badge rounded-pill px-3 py-2">Update Terkini</span>
-    </div>
-    <p class="text-muted">Presiden: "Orang desa gak pakai dolar" • Rupiah nyaris 18rb • Pak Owi "SAYA AKAN LAWAN"</p>
-    <div class="row g-4" id="politicMemeRow">
-      <!-- generate via JS canvas meme politik -->
-    </div>
-  </div>
-
-  <!-- ========= UPLOAD MEME SENDIRI (biar user bisa ngisi stiker / gambar) dan download ========= -->
-  <div id="uploadOwn" class="mb-5 pt-3">
-    <div class="upload-area p-4 text-center">
-      <h4><i class="fas fa-arrow-up-from-bracket text-warning"></i> Upload Meme / Stiker Kamu Sendiri</h4>
-      <p>Bisa upload gambar lucu, meme politik custom, atau stiker kesukaan. Lalu download hasilnya.</p>
-      <input type="file" id="uploadMemeFile" accept="image/jpeg,image/png,image/webp" class="form-control w-75 mx-auto mb-3">
-      <div id="previewUploadContainer" class="d-flex flex-wrap justify-content-center gap-3 mt-3"></div>
-      <p class="small text-secondary mt-2">*gambar yang diupload bisa langsung di-download (klik tombol di bawah preview).</p>
-    </div>
-  </div>
-</div>
-
-<footer class="text-center py-4 mt-3">
-  <p class="mb-0"><i class="fas fa-coffee"></i> Memeverse absurd • random satire • Rating IEM powered by telinga rakyat. <br> © 2025 | #JanganSerius | <i class="fab fa-github"></i> Repo buat tugas kocak</p>
-  <p class="small mt-2">🔗 Fitur download meme dari canvas & upload. semua konten politik hanya satire lucu-lucuan.</p>
-</footer>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-  // ---------- helper: download canvas as PNG ----------
-  function downloadCanvasAsImage(canvasElement, fileName = 'meme.png') {
-    try {
-      const link = document.createElement('a');
-      link.download = fileName;
-      link.href = canvasElement.toDataURL('image/png');
-      link.click();
-    } catch(e) {
-      alert("gagal download, coba klik kanan simpan gambar");
-    }
-  }
-
-  // fungsi bikin canvas meme generic (teks atas, tengah, bawah + warna latar)
-  function createMemeCanvas(containerId, memeId, topText, middleText, bottomText, bgColor = '#f8f0e3', accentColor = '#d35400') {
-    // cek jika sudah ada canvas sebelumnya, bersihkan container
-    const container = document.getElementById(containerId);
-    if (!container) return;
-    // buat wrapper card + canvas
-    const colDiv = document.createElement('div');
-    colDiv.className = 'col-md-6 col-lg-4';
-    const cardDiv = document.createElement('div');
-    cardDiv.className = 'card-meme p-3 h-100';
-    const canvas = document.createElement('canvas');
-    canvas.width = 500;
-    canvas.height = 400;
-    canvas.className = 'meme-canvas w-100';
-    canvas.style.objectFit = 'contain';
-    const ctx = canvas.getContext('2d');
-    // gambar meme
-    ctx.fillStyle = bgColor;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    // border efek lucu
-    ctx.strokeStyle = accentColor;
-    ctx.lineWidth = 6;
-    ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20);
-    // text styling
-    ctx.fillStyle = '#2c3e2f';
-    ctx.font = 'bold 26px "Comic Neue", "Segoe UI Emoji"';
-    ctx.textAlign = 'center';
-    ctx.shadowBlur = 0;
-    // top text
-    ctx.fillStyle = '#b3413a';
-    ctx.font = 'bold 22px "Impact", "Segoe UI"';
-    ctx.fillText(topText, canvas.width/2, 55);
-    // middle text (besar)
-    ctx.fillStyle = '#1e272e';
-    ctx.font = 'bold 28px "Verdana", "Segoe UI Emoji"';
-    ctx.fillText(middleText, canvas.width/2, canvas.height/2 - 20);
-    // bottom text
-    ctx.fillStyle = '#2c3e50';
-    ctx.font = '18px "Courier New", monospace';
-    ctx.fillText(bottomText, canvas.width/2, canvas.height - 50);
-    // tambahan efek decorative
-    ctx.fillStyle = '#e67e22';
-    ctx.font = 'italic 14px sans-serif';
-    ctx.fillText('⚡ meme politik ⚡', canvas.width-80, canvas.height-15);
-    
-    // tombol download
-    const btnDownload = document.createElement('button');
-    btnDownload.innerHTML = '<i class="fas fa-download"></i> Download Meme PNG';
-    btnDownload.className = 'btn btn-download-meme mt-3 w-100';
-    btnDownload.onclick = (function(canvasCopy, idName) {
-      return function() { downloadCanvasAsImage(canvasCopy, `meme_${idName}.png`); };
-    })(canvas, memeId);
-    
-    cardDiv.appendChild(canvas);
-    cardDiv.appendChild(btnDownload);
-    colDiv.appendChild(cardDiv);
-    container.appendChild(colDiv);
-  }
-  
-  // generate stiker vingral (random absurd)
-  function buildVingralStickers() {
-    const container = document.getElementById('vingralGallery');
-    if (!container) return;
-    container.innerHTML = '';
-    const stikerList = [
-      { top: "VINGRAL VIRAL", mid: "🤡 Monyet Ngopi 🤡", bottom: "stiker kekinian", bg: "#ffe5b4", accent: "#ff914d" },
-      { top: "GAS MINGGIR!", mid: "🧠 SKIBIDI OYEN 🧠", bottom: "meme wibu absurd", bg: "#d9e6f5", accent: "#228B22" },
-      { top: "EKONOMI INDONESIA", mid: "📉 Rupiah ke Dolar 📈", bottom: "18.000? santuyy", bg: "#ffdfbf", accent: "#ba2c1d" },
-      { top: "VINGRAL EDITOR", mid: "😂 AHY KETAK-KETIK 😂", bottom: "stiker lucu parah", bg: "#f3cfc3", accent: "#8e44ad" }
+    // Daftar URL gambar dari soal
+    const imageUrls = [
+        "https://cdn.postimage.me/2026/05/20/1000394851.png",
+        "https://cdn.postimage.me/2026/05/20/1000394848.png",
+        "https://cdn.postimage.me/2026/05/20/1000394849.png",
+        "https://cdn.postimage.me/2026/05/20/1000394846.png",
+        "https://cdn.postimage.me/2026/05/20/1000394847.png",
+        "https://cdn.postimage.me/2026/05/20/1000394852.png",
+        "https://cdn.postimage.me/2026/05/20/1000393253.jpg",
+        "https://cdn.postimage.me/2026/05/20/1000393321.png"
     ];
-    stikerList.forEach((item, idx) => {
-      const colDiv = document.createElement('div');
-      colDiv.className = 'col-md-6 col-lg-4';
-      const cardDiv = document.createElement('div');
-      cardDiv.className = 'card-meme p-3 h-100';
-      const canvas = document.createElement('canvas');
-      canvas.width = 500;
-      canvas.height = 380;
-      canvas.className = 'meme-canvas w-100';
-      const ctx = canvas.getContext('2d');
-      ctx.fillStyle = item.bg;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "#3d2b1a";
-      ctx.font = 'bold 26px "Segoe UI Emoji"';
-      ctx.fillText(item.top, canvas.width/2, 60);
-      ctx.font = '28px "Comic Neue"';
-      ctx.fillStyle = '#c0392b';
-      ctx.fillText(item.mid, canvas.width/2, canvas.height/2);
-      ctx.font = '18px monospace';
-      ctx.fillStyle = '#2c3e50';
-      ctx.fillText(item.bottom, canvas.width/2, canvas.height-50);
-      ctx.fillStyle = "#b87333";
-      ctx.font = '12px sans-serif';
-      ctx.fillText("#vingral sticker pack", canvas.width-110, canvas.height-18);
-      const btn = document.createElement('button');
-      btn.innerHTML = '<i class="fas fa-download"></i> Simpan Stiker';
-      btn.className = 'btn btn-download-meme mt-3 w-100';
-      btn.onclick = (function(c, i) { return function() { downloadCanvasAsImage(c, `stiker_vingral_${i}.png`); }; })(canvas, idx);
-      cardDiv.appendChild(canvas);
-      cardDiv.appendChild(btn);
-      colDiv.appendChild(cardDiv);
-      container.appendChild(colDiv);
-    });
-  }
 
-  // generate meme politik indonesia sesuai referensi: pak pres "org desa gk pake dolar", rupiah 18rb, pak owi "SAYA AKAN LAWAN"
-  function buildPoliticalMemes() {
-    const container = document.getElementById('politicMemeRow');
-    if (!container) return;
-    container.innerHTML = '';
-    const memes = [
-      { top: "PRESIDEN REPUBLIK INDONESIA", mid: "ORANG DESA GA PAKE DOLAR", bottom: "tapi nilai tukar rupiah melemah ke 17.900/USD", bgColor: "#f5e6d3", accent: "#b33", id: "politik1" },
-      { top: "KABAR BURUK RUPIAH", mid: "NYENTUH RP 18.000 / USD 😭", bottom: "Pak Presiden: 'Tenang, kita desa mandiri!'", bgColor: "#ffe0e0", accent: "#aa2e1e", id: "politik2" },
-      { top: "PAK OWI (PRABOWO)", mid: "🔥 SAYA AKAN LAWAN 🔥", bottom: "lawannya nilai tukar atau lawannya kritik?", bgColor: "#eaeef2", accent: "#e67e22", id: "politik3" },
-      { top: "PIDATO PRESIDEN + DOLLAR", mid: "Kita rakyat desa gak butuh dollar", bottom: "tapi harga BBM & impor naik cuy 💸", bgColor: "#fff2cc", accent: "#b94b0e", id: "politik4" }
-    ];
-    memes.forEach((m, idx) => {
-      const colDiv = document.createElement('div');
-      colDiv.className = 'col-md-6';
-      const cardDiv = document.createElement('div');
-      cardDiv.className = 'card-meme p-3 h-100';
-      const canvas = document.createElement('canvas');
-      canvas.width = 550;
-      canvas.height = 380;
-      canvas.className = 'meme-canvas w-100';
-      const ctx = canvas.getContext('2d');
-      ctx.fillStyle = m.bgColor;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      // border garis dobel
-      ctx.strokeStyle = m.accent;
-      ctx.lineWidth = 4;
-      ctx.strokeRect(15, 15, canvas.width-30, canvas.height-30);
-      ctx.fillStyle = "#a8431d";
-      ctx.font = 'bold 20px "Impact"';
-      ctx.fillText(m.top, canvas.width/2, 55);
-      ctx.font = 'bold 26px "Segoe UI Black"';
-      ctx.fillStyle = "#c0392b";
-      ctx.fillText(m.mid, canvas.width/2, canvas.height/2 - 30);
-      ctx.font = '16px "Courier New", monospace';
-      ctx.fillStyle = "#3a2c1f";
-      ctx.fillText(m.bottom, canvas.width/2, canvas.height-60);
-      // tambah gambar banteng / ketawa
-      ctx.fillStyle = "#f1c40f";
-      ctx.font = '26px "Segoe UI Emoji"';
-      ctx.fillText("🤣🤣", canvas.width-60, canvas.height-25);
-      ctx.fillText("🇮🇩", 30, canvas.height-35);
-      const btn = document.createElement('button');
-      btn.innerHTML = '<i class="fas fa-download"></i> Download Meme Politik';
-      btn.className = 'btn btn-download-meme mt-3 w-100';
-      btn.onclick = (function(can, name) { return function() { downloadCanvasAsImage(can, `meme_politik_${name}.png`); }; })(canvas, m.id);
-      cardDiv.appendChild(canvas);
-      cardDiv.appendChild(btn);
-      colDiv.appendChild(cardDiv);
-      container.appendChild(colDiv);
-    });
-  }
-  
-  // Upload Gambar custom + download (biar user ngisi meme/stiker sendiri)
-  function initUploadFeature() {
-    const uploadInput = document.getElementById('uploadMemeFile');
-    const previewDiv = document.getElementById('previewUploadContainer');
-    uploadInput.addEventListener('change', function(e) {
-      const files = e.target.files;
-      if(!files.length) return;
-      previewDiv.innerHTML = '';
-      for(let i=0; i<files.length; i++) {
-        const file = files[i];
-        if(!file.type.startsWith('image/')) continue;
-        const reader = new FileReader();
-        reader.onload = function(ev) {
-          const imgContainer = document.createElement('div');
-          imgContainer.className = 'position-relative border rounded-3 p-2 bg-white shadow-sm';
-          imgContainer.style.width = '200px';
-          const img = document.createElement('img');
-          img.src = ev.target.result;
-          img.className = 'img-fluid rounded-3';
-          img.style.height = '160px';
-          img.style.objectFit = 'cover';
-          const downloadOwnBtn = document.createElement('button');
-          downloadOwnBtn.innerHTML = '<i class="fas fa-download"></i> Download gambar ini';
-          downloadOwnBtn.className = 'btn btn-sm btn-outline-dark mt-2 w-100';
-          // download blob original
-          downloadOwnBtn.onclick = (function(blobData, fileName) {
-            return function() {
-              const a = document.createElement('a');
-              a.href = blobData;
-              a.download = fileName || 'meme_upload.png';
-              document.body.appendChild(a);
-              a.click();
-              document.body.removeChild(a);
-            };
-          })(ev.target.result, `meme_upload_${Date.now()}_${i}.png`);
-          imgContainer.appendChild(img);
-          imgContainer.appendChild(downloadOwnBtn);
-          previewDiv.appendChild(imgContainer);
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-  }
-  
-  // fungsi untuk mengubah semua link rating IEM sesuai custom user
-  function setupIemLinkChanger() {
-    const applyBtn = document.getElementById('applyLinksBtn');
-    const urlInput = document.getElementById('customIemUrl');
-    const link1 = document.getElementById('iemLink1');
-    const link2 = document.getElementById('iemLink2');
-    const link3 = document.getElementById('iemLink3');
-    applyBtn.addEventListener('click', function() {
-      let newUrl = urlInput.value.trim();
-      if(newUrl === "") newUrl = "#";
-      if(!newUrl.startsWith('http')) {
-        if(newUrl !== "#") newUrl = "https://" + newUrl;
-      }
-      link1.href = newUrl;
-      link2.href = newUrl;
-      link3.href = newUrl;
-      alert("Link rating IEM berhasil diubah ke: " + newUrl + "\nSekarang semua tombol mengarah ke link favoritmu!");
-    });
-    // default jika tidak diisi biarkan # aja
-    link1.href = "#"; link2.href = "#"; link3.href = "#";
-  }
-  
-  // WhatsApp Sticker Pack Link (ganti dengan link resmi atau wa.me, bebas)
-  function setupWaSticker() {
-    const waLink = document.getElementById('whatsappStickerLink');
-    if(waLink) {
-      waLink.href = "https://whatsapp.com/channel/0029VaVcmLmE0K3jFjKp0X1F"; // contoh dummy link WA (user bisa ganti di kode)
-      waLink.setAttribute('target', '_blank');
-      waLink.innerHTML = '<i class="fab fa-whatsapp"></i> Download Sticker Pack WA (resmi meme)';
-      // optional: jika ingin benar-benar bisa ganti sendiri, kita bisa tambah tooltip
+    // Fungsi untuk mengambil nama file dari URL (opsional)
+    function getFileName(url) {
+        try {
+            const parts = url.split('/');
+            let filename = parts.pop() || 'gambar';
+            // hapus parameter query jika ada
+            filename = filename.split('?')[0];
+            if (!filename.includes('.')) filename += '.png';
+            return filename;
+        } catch(e) {
+            return 'gambar_tugas';
+        }
     }
-  }
-  
-  // Inisiasi semua galeri dinamis
-  document.addEventListener('DOMContentLoaded', function() {
-    buildVingralStickers();
-    buildPoliticalMemes();
-    initUploadFeature();
-    setupIemLinkChanger();
-    setupWaSticker();
-    // tambahan: berikan fallback untuk link custom via user bisa ubah manual juga
-    const customUrlInput = document.getElementById('customIemUrl');
-    if(customUrlInput) customUrlInput.placeholder = "https://link-rating-earphone-favoritmu.com";
-    // penambahan tooltips
-  });
+
+    // Tampilkan notifikasi singkat
+    function showToast(message, duration = 1500) {
+        const toast = document.getElementById('toastMsg');
+        toast.textContent = message;
+        toast.style.opacity = '1';
+        setTimeout(() => {
+            toast.style.opacity = '0';
+        }, duration);
+    }
+
+    // Fungsi unduh: karena gambar cross-origin, kita buka di tab baru dengan instruksi simpan
+    // Ini paling aman dan berfungsi di semua perangkat (Android: tekan lama, Desktop: klik kanan)
+    function handleDownload(url, event) {
+        event.stopPropagation(); // mencegah klik pada kartu
+        // Buka URL gambar langsung di tab baru
+        window.open(url, '_blank');
+        // Notifikasi kecil
+        showToast('✅ Gambar dibuka di tab baru. Tekan lama / klik kanan → Simpan gambar', 2000);
+    }
+
+    // Fungsi untuk membuat kartu galeri
+    function buildGallery() {
+        const container = document.getElementById('galleryContainer');
+        container.innerHTML = ''; // kosongkan loading
+
+        imageUrls.forEach((url, index) => {
+            const card = document.createElement('div');
+            card.className = 'card';
+
+            // Wrapper gambar + klik untuk preview (buka di tab baru juga)
+            const imgWrapper = document.createElement('div');
+            imgWrapper.className = 'image-wrapper';
+            const img = document.createElement('img');
+            img.src = url;
+            img.alt = `Gambar Stimker ${index+1}`;
+            img.loading = 'lazy';
+            // Klik gambar -> buka di tab baru (mirip download)
+            imgWrapper.addEventListener('click', (e) => {
+                e.stopPropagation();
+                window.open(url, '_blank');
+                showToast('🔍 Membuka gambar ukuran penuh', 1000);
+            });
+            imgWrapper.appendChild(img);
+
+            // Bagian info: nama file dan tombol unduh
+            const infoDiv = document.createElement('div');
+            infoDiv.className = 'card-info';
+
+            const fileNameSpan = document.createElement('span');
+            fileNameSpan.className = 'file-name';
+            fileNameSpan.title = getFileName(url);
+            fileNameSpan.textContent = getFileName(url).substring(0, 20) + (getFileName(url).length > 20 ? '…' : '');
+
+            const downloadBtn = document.createElement('button');
+            downloadBtn.className = 'btn-download';
+            downloadBtn.innerHTML = '📥 Unduh';
+            downloadBtn.addEventListener('click', (event) => handleDownload(url, event));
+
+            infoDiv.appendChild(fileNameSpan);
+            infoDiv.appendChild(downloadBtn);
+
+            card.appendChild(imgWrapper);
+            card.appendChild(infoDiv);
+            container.appendChild(card);
+        });
+    }
+
+    // Eksekusi saat halaman siap
+    buildGallery();
 </script>
-
-<!-- minor style tambahan -->
-<style>
-  .btn-outline-coffee:hover i, .btn-outline-coffee:hover { background-color: #d35400; color:white; border-color:#d35400;}
-  .card-meme { background: #fef5e7; transition: 0.2s;}
-  footer { font-size: 0.85rem; }
-  .upload-area input, .upload-area button { border-radius: 50px; }
-  ::selection { background: #f39c12; color: #1e1e1e; }
-  .rating-star i { margin-right: 2px; }
-</style>
 </body>
 </html>
-```
